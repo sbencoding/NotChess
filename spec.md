@@ -3,17 +3,17 @@
 **Chosen game**: Antichess
 
 Some online examples:
-* greenchess.net/rules.php?v=suicide
+* [GreenChess](greenchess.net/rules.php?v=suicide)
     - It doesn't have a clear button to play the game, neither a tutorial, only an explanation of the rules.
     - The user needs to think about how to start the game, it's not very clear at first sight
     - Not self-evident nor self-explanatory, it's hard to identify how to start a game
     - Aesthetics: The UI looks old, the text color and the background color is not the best choice, it's a bit hard to read
-* arcadespot.com/game/anti-chess
+* [Anti chess game](arcadespot.com/game/anti-chess)
     - A bit long loading time, but the user interface is very intuitive, however it is not clear what pieces correspond to which figures
     - Not cluttered, it's just the main menu then the board
     - Self-evident: the menu is very simple
     - Aesthetics: Looks nice, maybe a bit too styled to be clear
-* lichess.org (some setup required)
+* [LiChess](lichess.org) (some setup required)
     - Starting a a game with this variant was pretty easy, however the site offers much more functionality then just playing this one variant of chess
     - Because this is a general chess site, it is a bit cluttered compared to our other examples
     - Self-explanatory, because although there are a lot of options, all of them are explained
@@ -37,17 +37,22 @@ Are you tired of losing? Then capitalize on your skills and win something!
 
 ## Icon
 https://thenounproject.com/icon/chess-2087114/
+
 Flip it, so we achieve the "anti" effect
 
 ## Sound
 Maybe for moving and capturing pieces
 
 ## Colors
-**Main color**(Blue): #0083FF
-**Secondary color**(white): #F1F1F1
-**Chess Secondary color**(white-gray): #C1C1C1
-**Seconday blue color**(light-blue): #91C7F5
-**Button color**(Dark orange): #FFA710
+**Main color** (Blue): #0083FF
+
+**Secondary color** (white): #F1F1F1
+
+**Chess Secondary color** (white-gray): #C1C1C1
+
+**Seconday blue color** (light-blue): #91C7F5
+
+**Button color** (Dark orange): #FFA710
 
 ## Splash screen
 * Logo
@@ -57,3 +62,23 @@ Maybe for moving and capturing pieces
     - Total games played
     - Games being played currently
     - Total pieces taken
+* Actions
+    - Play the game
+    - See a tutorial
+    - Support the game
+
+## Game screen
+* Top part
+    - **Logo and Name** on the left
+    - Total **time elapsed** since the start of the match on the right
+* **Chat** (on the left)
+    - Send and receive messages from the opponent
+* **Chess Board** (in the middle)
+    - **Pieces out of the game** above and below the board
+    - Individual **time remaining** on the right of the board
+* **Actions** (on the right)
+    - **Resign** (quit the game and accept defeat)
+    - **Offer draw** (ends the game in a draw if the opponent accepts the offer)
+* **Footer** (on the bottom)
+    - Generic **copyright** text
+    - **Support button**
