@@ -1,6 +1,6 @@
 **NotChess**
  is a multiplayer web application in which you can play *AntiChess*, a variant of the well known Chess game in which the goal is to be the first to **lose** all of your pieces.
-If you wish to join NotChess's community and play some games of AntiChess, you can following commands:
+If you wish to join NotChess' community and play some games of AntiChess, you can following commands:
 * git clone https://github.com/sbencoding/NotChess.git
 * cd balloons-game
 * npm install
