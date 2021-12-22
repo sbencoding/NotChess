@@ -6,7 +6,7 @@ If you wish to join NotChess' community and play some games of AntiChess, you ca
     * git clone https://github.com/sbencoding/NotChess.git
     * cd notchess
     * npm install
-    * npm start</ul>
+    * npm start</ul></ul>
 You should be capable now of accesing the game [here](http://localhost:3000/ "the local host") now.
 If you would like to support NotChess, you can do so [here](http://NotChess/millionares)! (We thank you a lot if you decide to support us!).
 
