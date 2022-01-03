@@ -1,6 +1,3 @@
-function ChessPiece(col, tp) {
-    return {col, tp};
-}
 function ChessBoard() {
     let cells = [];
     for (let i = 0; i < 8; ++i) {
@@ -22,6 +19,19 @@ function ChessBoard() {
             for (let j = 0; j < fields.length; ++j) {
                 if (fields[j].firstElementChild) {
                     fields[j].removeChild(fields[j].firstElementChild);
+                }
+            }
+        }
+    };
+
+    const renderBoard = () => {
+        const rows = document.querySelector('#chess_board table tbody').children;
+        for (let i = 0; i < 8; ++i) {
+            for (let j = 0; j < 8; ++j) {
+                if (cells[i][j] !== null) {
+                    const img = document.createElement('img');
+                    img.src = cells[i][j].url;
+                    rows[i].children[j].appendChild(img);
                 }
             }
         }
@@ -52,6 +62,7 @@ function ChessBoard() {
                 addPiece(6, i, ChessPiece(playingColor, 'pawn'));
             }
             clearUI();
+            renderBoard();
         },
         printBoard: () => {
             console.log(cells);

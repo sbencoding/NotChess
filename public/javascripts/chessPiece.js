@@ -8,7 +8,7 @@
  */
 function ChessPiece(color, type) {
     return {
-        url : `images/${color}_${type}`,
+        url : `images/chess_pieces/${color}_${type}.png`,
         color, 
         type
     } 
