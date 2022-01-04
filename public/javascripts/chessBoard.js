@@ -42,13 +42,17 @@ function ChessBoard() {
 
     const dimBoard = function () {
         const cells = document.querySelectorAll("td");
-        cells.classList.add("dimmed");
-    }
+        for (var j = 0; j < cells.length; j++) {
+            cells[j].classList.add("dimmed");
+        }
+    };
 
     const lightenBoard = function () {
-        const cells = document.querySelectorAll("td");
-        cells.classList.remove("dimmed);
-    }
+        const cells = document.querySedslectorAll("td");
+        for (var j = 0; j < cells.length; j++) {
+            cells[j].classList.remove("dimmed");
+        }
+    };
 
     return {
         initBoard: (playingColor, eventHandler) => {
