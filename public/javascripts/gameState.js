@@ -14,20 +14,20 @@ function GameState(board, socket, startingPlayer, personalColor) {
 
     let displayMessage = function (statusCode) {
         let message = Status[statusCode];
-        document.querySelector("").textContent = message;
+        document.querySelector("#status_message").textContent = message;
         if(statusCode === "drawPrompt" || statusCode === "gameRematch") {
-            let buttons = document.querySelector("");
+            let buttons = document.querySelector("#message_buttons");
             buttons.classList.remove("hidden");
         }
         if(statusCode === "drawPrompt") {
-            let buttons = document.querySelector("");
-            buttons.querySelector("yesChild").onclick = acceptDraw;
-            buttons.querySelector("noChild").onclick = rejectDraw;
+            let buttons = document.querySelector("#message_buttons");
+            buttons.querySelector("#yesButton").onclick = acceptDraw;
+            buttons.querySelector("#noButton").onclick = rejectDraw;
         }
         else if (statusCode === "gameRematch") {
-            let buttons = document.querySelector("");
-            buttons.querySelector("yesChild").onclick = acceptRematch;
-            buttons.querySelector("noChild").onclick = rejectRematch;
+            let buttons = document.querySelector("#message_buttons");
+            buttons.querySelector("#yesButton").onclick = acceptRematch;
+            buttons.querySelector("#noButton").onclick = rejectRematch;
         }
     };
 
