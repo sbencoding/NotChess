@@ -46,10 +46,17 @@ function ChessBoard() {
         rows[row].children[col].classList.remove('dimmed');
     };
 
+    const markEnemySquare = (row, col) => {
+        const rows = document.querySelector('#chess_board table tbody').children;
+        if (!boundCheck(row, col)) return;
+        rows[row].children[col].classList.add('tag_enemy');
+    };
+
     const dimBoard = function () {
         const cells = document.querySelectorAll("td");
         for (var j = 0; j < cells.length; j++) {
             cells[j].classList.add("dimmed");
+            cells[j].classList.remove("tag_enemy");
         }
     };
 
@@ -57,6 +64,7 @@ function ChessBoard() {
         const cells = document.querySelectorAll("td");
         for (var j = 0; j < cells.length; j++) {
             cells[j].classList.remove("dimmed");
+            cells[j].classList.remove("tag_enemy");
         }
     };
 
@@ -125,6 +133,7 @@ function ChessBoard() {
             const result = getValidMoves(cells, row, col);
             result.enemies.forEach(pos => {
                 highlightSquare(pos[0], pos[1]);
+                markEnemySquare(pos[0], pos[1]);
             });
             if (result.enemies.length == 0) {
                 result.positions.forEach(pos => {
