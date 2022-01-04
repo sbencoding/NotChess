@@ -51,12 +51,16 @@ function GameState(board, socket, startingPlayer, personalColor) {
             if(!board.hasPiece(row, column) || board.getPiece(row, column).color !== personalColor) {
                 if(!board.checkMove(pieceSelected, row, column)) return;
                 else {
-                   let capturedPiece = board.makeMove(pieceSelected, row, column); 
-                   if(capturedPiece !== null) capturedEnemyPieces.push(capturedPiece);
-                   pieceSelected = undefined;
+                    let capturedPiece = board.makeMove(pieceSelected, row, column); 
+                    if(capturedPiece !== null) capturedEnemyPieces.push(capturedPiece);
+                    pieceSelected = undefined;
+                    board.deselectBoard();
                 }
             } else {
-                if(row === pieceSelected.row && column === pieceSelected.column) pieceSelected = undefined;
+                if(row === pieceSelected.row && column === pieceSelected.column) {
+                    pieceSelected = undefined;
+                    board.deselectBoard();
+                }
                 else pieceSelected = {piece : board.getPiece(row, column), row, column};
             }
         }
