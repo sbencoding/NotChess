@@ -40,6 +40,17 @@ function ChessBoard() {
         }
     };
 
+    const highlightSquare = (row, col) => {
+        const rows = document.querySelector('#chess_board table tbody').children;
+        if (row < 0 || row >= 8 || col < 0 || col >= 8) return;
+        rows[row].children[col].classList.remove('dimmed');
+    };
+
+    const hasEnemyPiece = (row, col, fColor) => {
+        if (row < 0 || row >= 8 || col < 0 || col >= 8 || cells[row][col] === null) return false;
+        return cells[row][col].color !== fColor;
+    };
+
     const dimBoard = function () {
         const cells = document.querySelectorAll("td");
         for (var j = 0; j < cells.length; j++) {
@@ -48,7 +59,7 @@ function ChessBoard() {
     };
 
     const lightenBoard = function () {
-        const cells = document.querySedslectorAll("td");
+        const cells = document.querySelectorAll("td");
         for (var j = 0; j < cells.length; j++) {
             cells[j].classList.remove("dimmed");
         }
@@ -110,7 +121,24 @@ function ChessBoard() {
             return true;
         },
         highlightMoves: (piece) => {
-
+            const row = piece.row;
+            const col = piece.column;
+            const type = piece.piece.type;
+            if (type === 'pawn') {
+                let hasEnemy = false;
+                if (hasEnemyPiece(row - 1, col - 1)) {
+                    highlightSquare(row - 1, col - 1);
+                    hasEnemy = true;
+                }
+                if (hasEnemyPiece(row - 1, col + 1)) {
+                    highlightSquare(row - 1, col + 1);
+                    hasEnemy = true;
+                }
+                if (!hasEnemy) {
+                    highlightSquare(row - 1, col);
+                    if (row === 6) highlightSquare(row - 2, col);
+                }
+            }
         }
     };
 }
