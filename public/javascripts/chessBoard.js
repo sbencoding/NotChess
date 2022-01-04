@@ -132,6 +132,7 @@ function ChessBoard() {
             return target;
         },
         checkMove: (piece, row, col) => {
+            // TODO: nice message if there's a move that hits the enemy but the user doesn't detect it?
             const possibleMoves = getValidMoves(cells, piece.row, piece.column);
             const possibleEnemyHit = canHitEnemy(piece.piece.color);
             if (possibleEnemyHit) {
