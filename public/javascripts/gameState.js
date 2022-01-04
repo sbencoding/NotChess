@@ -44,7 +44,9 @@ function GameState(board, socket, startingPlayer, personalColor) {
         if(currentPlayer !== 1) return;
         if(pieceSelected === undefined) {
             if (!board.hasPiece(row, column)) return;
-            pieceSelected = {piece : board.getPiece(row, column), row, column};
+            const piece = board.getPiece(row, column);
+            if (piece.color !== personalColor) return;
+            pieceSelected = {piece, row, column};
         } else {
             if(!board.hasPiece(row, column) || board.getPiece(row, column).color !== personalColor) {
                 if(!board.checkMove(pieceSelected, row, column)) return;
