@@ -12,11 +12,14 @@ function ChessBoard() {
         cells[row][col] = piece;
     };
 
-    const clearUI = () => {
+    const resetUI = (clickHandler) => {
         const rows = document.querySelector('#chess_board table tbody').children;
         for (let i = 0; i < rows.length; ++i) {
             const fields = rows[i].children;
             for (let j = 0; j < fields.length; ++j) {
+                fields[j].onclick = () => {
+                    clickHandler(i, j);
+                };
                 if (fields[j].firstElementChild) {
                     fields[j].removeChild(fields[j].firstElementChild);
                 }
@@ -38,7 +41,7 @@ function ChessBoard() {
     };
 
     return {
-        initBoard: (playingColor) => {
+        initBoard: (playingColor, eventHandler) => {
             const oppositeColor = (playingColor == 'white') ? 'black' : 'white';
             addPiece(0, 0, ChessPiece(oppositeColor, 'rook'));
             addPiece(7, 0, ChessPiece(playingColor, 'rook'));
@@ -61,14 +64,39 @@ function ChessBoard() {
                 addPiece(1, i, ChessPiece(oppositeColor, 'pawn'));
                 addPiece(6, i, ChessPiece(playingColor, 'pawn'));
             }
-            clearUI();
+            resetUI(eventHandler);
             renderBoard();
         },
         printBoard: () => {
             console.log(cells);
         },
+        hasPiece: (row, col) => {
+            return cells[row][col] !== null;
+        },
+        getPiece: (row, col) => {
+            return cells[row][col];
+        },
+        makeMove: (piece, row, col) => {
+            const target = cells[row][col];
+            const current = cells[piece.row][piece.column];
+            cells[row][col] = current;
+            cells[piece.row][piece.column] = null;
+            const rows = document.querySelector('#chess_board table tbody').children;
+            const targetField = rows[row].children[col];
+            const sourceField = rows[piece.row].children[piece.column];
+            if (target !== null) {
+                targetField.removeChild(targetField.firstElementChild);
+            }
+            const element = sourceField.firstElementChild;
+            sourceField.removeChild(element);
+            targetField.appendChild(element);
+            return target;
+        },
+        checkMove: (piece, row, col) => {
+            return true;
+        },
+        highlightMoves: (piece) => {
+
+        }
     };
 }
-
-const board = ChessBoard();
-board.initBoard('white');
