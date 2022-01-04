@@ -68,6 +68,17 @@ function ChessBoard() {
         }
     };
 
+    const canHitEnemy = (playingColor) => {
+        for (let i = 0; i < 8; ++i) {
+            for (let j = 0; j < 8; ++j) {
+                if (cells[i][j] == null || cells[i][j].color !== playingColor) continue;
+                const moves = getValidMoves(cells, i, j);
+                if (moves.enemies.length > 0) return true;
+            }
+        }
+        return false;
+    };
+
     return {
         initBoard: (playingColor, eventHandler) => {
             const oppositeColor = (playingColor == 'white') ? 'black' : 'white';
@@ -121,7 +132,12 @@ function ChessBoard() {
             return target;
         },
         checkMove: (piece, row, col) => {
-            return true;
+            const possibleMoves = getValidMoves(cells, piece.row, piece.column);
+            const possibleEnemyHit = canHitEnemy(piece.piece.color);
+            if (possibleEnemyHit) {
+                return possibleMoves.enemies.find((arr) => arr[0] == row && arr[1] == col) !== undefined;
+            }
+            return possibleMoves.positions.find((arr) => arr[0] == row && arr[1] == col) !== undefined;
         },
         highlightMoves: (piece) => {
             const row = piece.row;
