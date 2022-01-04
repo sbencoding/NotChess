@@ -21,19 +21,19 @@ tr:nth-child(2n) td:nth-child(2n+1) {
 }
 
 tr:nth-child(2n) td:nth-child(2n+1).dimmed {
-    background-color: #232d99;
+    background-color: #3954cc;
 }
 
 tr:nth-child(2n+1) td:nth-child(2n).dimmed {
-    background-color: #232d99;
+    background-color: #3954cc;
 }
 
 tr:nth-child(2n) td:nth-child(2n).dimmed {
     /*instead of white square*/
-    background-color: #787b96;
+    background-color: #d4d4d4;
 }
 
 tr:nth-child(2n+1) td:nth-child(2n+1).dimmed {
     /*instead of white square*/
-    background-color: #787b96;
+    background-color: #d4d4d4;
 }
