@@ -40,6 +40,16 @@ function ChessBoard() {
         }
     };
 
+    const dimBoard = function () {
+        const cells = document.querySelectorAll("td");
+        cells.classList.add("dimmed");
+    }
+
+    const lightenBoard = function () {
+        const cells = document.querySelectorAll("td");
+        cells.classList.remove("dimmed);
+    }
+
     return {
         initBoard: (playingColor, eventHandler) => {
             const oppositeColor = (playingColor == 'white') ? 'black' : 'white';
