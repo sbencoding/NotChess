@@ -47,5 +47,5 @@ tr:nth-child(2n+1) td:nth-child(2n+1).dimmed {
 .tag_enemy {
     /*TODO: nicer color*/
     background-color: red;
-    animation: enemy_blinking 4s infinite;
+    animation: enemy_blinking 3s infinite;
 }
