@@ -14,6 +14,7 @@ const Status = {
     gameAborted: "Your enemy aborted the game. Go back to find another player! ",
     gameResigned: "Your enemy resigned the game, you won! Go back to find another player! ",
     rematchDenied: "Your enemy left. Go back to find another player! ",
-    pieceDenied: "There is one or more enemy piece that can be taken! Please take one! "
+    pieceDenied: "There is one or more enemy piece that can be taken! Please take one! ",
+    waitingPlayer: "There are currently no players, waiting for an oponent... "
 };
 
