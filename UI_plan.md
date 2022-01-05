@@ -45,4 +45,31 @@
 * `capturedEnemyPieces` *ChessPiece[]* - the enemy pieces captured.
 * `chatMessages` *ChatMessage[]* - all the messages sent by the two players
 
-
+# Task 3
+## 3.3
+* `enter_game` - server sends to both clients
+    - `player_number` - a number assigned to the player (1 or 2), also determines playing color
+    - `player_id` - a number assigned to the player (long and random character string), for security reasons
+* `make_move` - one client sends to the server, and server forwards it to the other client if the move is valid
+    - `player_id` - a number assigned to the player (long and random character string), for security reasons
+    - `originRow` - the row where the piece is moving from
+    - `originColumn` - the column where the piece is moving from
+    - `destinationRow` - the row where the piece is moving to
+    - `destinationColumn` - the column where the piece is moving to
+* `game_end` - server sends to both clients
+    - `winner_player` - the number of the player who won
+* `offer_draw` - client sends to server and server forwards it to the other client
+    - `player_id` - a number assigned to the player (long and random character string), for security reasons
+* `accept_draw` - client sends to server and server forwards it to the other client
+    - `player_id` - a number assigned to the player (long and random character string), for security reasons
+* `reject_draw` - client sends to server and server forwards it to the other client
+    - `player_id` - a number assigned to the player (long and random character string), for security reasons
+* `resign` - client sends to server and server forwards it to the other client
+    - `player_id` - a number assigned to the player (long and random character string), for security reasons
+* `accept_rematch` - client sends to server and server forwards it to the other client
+    - `player_id` - a number assigned to the player (long and random character string), for security reasons
+* `reject_rematch` - client sends to server and server forwards it to the other client
+    - `player_id` - a number assigned to the player (long and random character string), for security reasons
+* `send_message` - client sends to server and server forwards it to the other client
+    - `player_id` - a number assigned to the player (long and random character string), for security reasons
+    - `message` - the text content of the message
