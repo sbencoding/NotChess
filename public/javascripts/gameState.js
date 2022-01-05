@@ -12,6 +12,14 @@ function GameState(board, socket, startingPlayer, personalColor) {
     let currentPlayer = startingPlayer;
     let pieceSelected;
 
+    socket.onmessage = function (event) {
+       console.log(event.data);
+    };
+
+    socket.onopen = function () {
+        socket.send("Hello from the client!");
+    };
+
     let displayMessage = function (/** @type {string} */ statusCode) {
         let message = Status[statusCode];
         document.querySelector("#status_message").textContent = message;

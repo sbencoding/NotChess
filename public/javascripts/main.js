@@ -1,4 +1,5 @@
 const board = ChessBoard();
-const state = GameState(board, undefined, 1, 'white');
+const socket = new WebSocket("ws://localhost:3000");
+const state = GameState(board, socket, 1, 'white');
 
 state.initGame();
