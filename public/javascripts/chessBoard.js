@@ -1,3 +1,10 @@
+const movingSound = new Audio("audio/chess_piece_sound.wav");
+
+/**
+ * This is the chessBoard class, for the object chessBoard used in gameState.
+ * @returns void
+ */
+
 function ChessBoard() {
     let cells = [];
     for (let i = 0; i < 8; ++i) {
@@ -11,6 +18,11 @@ function ChessBoard() {
     const addPiece = (row, col, piece) => {
         cells[row][col] = piece;
     };
+
+    /**
+     * This functions resets the board, removing all the pieces that might exist.
+     * @clickHandler ???
+     */
 
     const resetUI = (clickHandler) => {
         const rows = document.querySelector('#chess_board table tbody').children;
@@ -27,6 +39,10 @@ function ChessBoard() {
         }
     };
 
+    /**
+     * This functions renderes all cells that have a piece with their respective icons
+     */
+
     const renderBoard = () => {
         const rows = document.querySelector('#chess_board table tbody').children;
         for (let i = 0; i < 8; ++i) {
@@ -40,17 +56,35 @@ function ChessBoard() {
         }
     };
 
+    /**
+     * This function removes the dimness of a single square
+     * @param {*} row the row of the square to remove the dimness from
+     * @param {*} col the column of the square to remove the dimness from
+     * @returns void
+     */
+
     const highlightSquare = (row, col) => {
         const rows = document.querySelector('#chess_board table tbody').children;
         if (!boundCheck(row, col)) return;
         rows[row].children[col].classList.remove('dimmed');
     };
 
+    /**
+     * This function fills a single square with red, indicating that it is an enemy square 
+     * @param {*} row the row of the square to fill with red
+     * @param {*} col the column of the square to fill with red
+     * @returns void
+     */
+
     const markEnemySquare = (row, col) => {
         const rows = document.querySelector('#chess_board table tbody').children;
         if (!boundCheck(row, col)) return;
         rows[row].children[col].classList.add('tag_enemy');
     };
+
+    /**
+     * This function dims all of the board
+     */
 
     const dimBoard = function () {
         const cells = document.querySelectorAll("td");
@@ -60,6 +94,10 @@ function ChessBoard() {
         }
     };
 
+    /**
+     * This function removes the dimness of all the board
+     */
+
     const lightenBoard = function () {
         const cells = document.querySelectorAll("td");
         for (var j = 0; j < cells.length; j++) {
@@ -67,6 +105,12 @@ function ChessBoard() {
             cells[j].classList.remove("tag_enemy");
         }
     };
+
+    /**
+     * This function verifies if it's possible for the player to eat an enemy piece
+     * @param {*} playingColor to color of the pieces of the player 
+     * @returns a boolean indicating if the player can take an enemy piece
+     */
 
     const canHitEnemy = (playingColor) => {
         for (let i = 0; i < 8; ++i) {
@@ -80,6 +124,21 @@ function ChessBoard() {
     };
 
     return {
+
+        /**
+         * The same function as above but as a public function of board
+         * @param {*} playingColor the color of the pieces of the player
+         * @returns a boolean indicating if the player can take an enemy piece
+         */
+        canHitEnemy: (playingColor) => {
+            return(canHitEnemy(playingColor));
+        },
+
+        /**
+         * This function initializes the board with all the pieces with the correct colors
+         * @param {*} playingColor the color of the player
+         * @param {*} eventHandler the function that makes the player moves, considering chess contingencies
+         */
         initBoard: (playingColor, eventHandler) => {
             const oppositeColor = (playingColor == 'white') ? 'black' : 'white';
             addPiece(0, 0, ChessPiece(oppositeColor, 'rook'));
@@ -106,6 +165,7 @@ function ChessBoard() {
             resetUI(eventHandler);
             renderBoard();
         },
+
         printBoard: () => {
             console.log(cells);
         },
@@ -115,6 +175,19 @@ function ChessBoard() {
         getPiece: (row, col) => {
             return cells[row][col];
         },
+
+        getCells: () => {
+            return cells;
+        },
+
+        /**
+         * This function makes the literal move of the piece within the chess board
+         * @param {*} piece to be moved
+         * @param {*} row the row to be moved to
+         * @param {*} col the column to be moved to
+         * @returns the enemy piece that might have been replaced by the moved piece
+         */
+
         makeMove: (piece, row, col) => {
             const target = cells[row][col];
             const current = cells[piece.row][piece.column];
@@ -129,10 +202,19 @@ function ChessBoard() {
             const element = sourceField.firstElementChild;
             sourceField.removeChild(element);
             targetField.appendChild(element);
+            movingSound.play();
             return target;
         },
+
+        /**
+         * This function returns a boolean representing the possibility of a certain move, taking into consideration
+         *  AntiChess contingencies
+         * @param {*} piece the piece (object) to check the moves for
+         * @param {*} row the row of the intended square after the move
+         * @param {*} col the column of the intended square after the move
+         * @returns a boolean representing the possibility of this move.
+         */
         checkMove: (piece, row, col) => {
-            // TODO: nice message if there's a move that hits the enemy but the user doesn't detect it?
             const possibleMoves = getValidMoves(cells, piece.row, piece.column);
             const possibleEnemyHit = canHitEnemy(piece.piece.color);
             if (possibleEnemyHit) {
@@ -140,6 +222,13 @@ function ChessBoard() {
             }
             return possibleMoves.positions.find((arr) => arr[0] == row && arr[1] == col) !== undefined;
         },
+
+        /**
+         * This function takes care of all the logic related with highlighting the possible moves of the selected
+         * piece, taking into consideration AntiChess contingencies
+         * @param {*} piece the piece that is selected
+         */
+
         highlightMoves: (piece) => {
             const row = piece.row;
             const col = piece.column;
@@ -158,6 +247,10 @@ function ChessBoard() {
                 });
             }
         },
+
+        /**
+         * This function takes all the dimness of the board
+         */
         deselectBoard: () => {
             lightenBoard();
         }

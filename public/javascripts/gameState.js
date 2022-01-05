@@ -1,6 +1,6 @@
 //@ts-check
 
-const movingSound = new Audio("...");
+
 
 function GameState(board, socket, startingPlayer, personalColor) {
     let personalTimer = 600;
@@ -12,7 +12,7 @@ function GameState(board, socket, startingPlayer, personalColor) {
     let currentPlayer = startingPlayer;
     let pieceSelected;
 
-    let displayMessage = function (statusCode) {
+    let displayMessage = function (/** @type {string} */ statusCode) {
         let message = Status[statusCode];
         document.querySelector("#status_message").textContent = message;
         if(statusCode === "drawPrompt" || statusCode === "gameRematch") {
@@ -41,11 +41,18 @@ function GameState(board, socket, startingPlayer, personalColor) {
     };
 
     let playerMove = function (row, column) {
+        document.querySelector("#status_message").textContent = "";
         if(currentPlayer !== 1) return;
         if(pieceSelected === undefined) {
             if (!board.hasPiece(row, column)) return;
             const piece = board.getPiece(row, column);
             if (piece.color !== personalColor) return;
+            if(board.canHitEnemy(personalColor)) {
+                if(getValidMoves(board.getCells(), row, column).enemies.length === 0) {
+                    displayMessage("pieceDenied");
+                    return;
+                }
+            }
             pieceSelected = {piece, row, column};
         } else {
             if(!board.hasPiece(row, column) || board.getPiece(row, column).color !== personalColor) {
@@ -61,7 +68,15 @@ function GameState(board, socket, startingPlayer, personalColor) {
                     pieceSelected = undefined;
                     board.deselectBoard();
                 }
-                else pieceSelected = {piece : board.getPiece(row, column), row, column};
+                else {
+                    if(board.canHitEnemy(personalColor)) {
+                        if(getValidMoves(board.getCells(), row, column).enemies.length === 0) {
+                            displayMessage("pieceDenied");
+                            return;
+                        }
+                    }
+                    pieceSelected = {piece : board.getPiece(row, column), row, column};
+                }    
             }
         }
         highlightMoves();
