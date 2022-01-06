@@ -37,7 +37,7 @@ function Match(socket1, socket2) {
                 if(blackTimer === 0) {
                     socket1.send(JSON.stringify({'command': 'game_end', 'winner_player': 1}));
                     socket2.send(JSON.stringify({'command': 'game_end', 'winner_player': 1}));
-                } else (whiteTimer === 0) {
+                } else {
                     socket1.send(JSON.stringify({'command': 'game_end', 'winner_player': 2}));
                     socket2.send(JSON.stringify({'command': 'game_end', 'winner_player': 2}));
                 }
