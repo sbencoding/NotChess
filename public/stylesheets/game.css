@@ -49,3 +49,7 @@ tr:nth-child(2n+1) td:nth-child(2n+1).dimmed {
     background-color: red;
     animation: enemy_blinking 3s infinite;
 }
+
+.hidden {
+    display: none;
+}
