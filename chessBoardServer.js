@@ -50,7 +50,8 @@ function ChessBoard() {
          * @param {*} playingColor the color of the player
          * @param {*} eventHandler the function that makes the player moves, considering chess contingencies
          */
-        initBoard: (playingColor, eventHandler) => {
+        initBoard: () => {
+            playingColor = 'white'
             const oppositeColor = (playingColor == 'white') ? 'black' : 'white';
             addPiece(0, 0, ChessPiece(oppositeColor, 'rook'));
             addPiece(7, 0, ChessPiece(playingColor, 'rook'));
