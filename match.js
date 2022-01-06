@@ -5,6 +5,10 @@ const ChessBoard = require('./chessBoardServer');
  */
 
 function Match(socket1, socket2) {
+    let capturedBlackPieces = [];
+    let capturedWhitePieces = [];
+
+
     function getRandom() {
         return crypto.randomBytes(60).toString('hex');
     }
@@ -32,13 +36,25 @@ function Match(socket1, socket2) {
                 let flippedCommand = {'command': 'make_move', 'player_id': undefined, 'origin_row': temp.origin_row, 
                 'origin_column': temp.origin_column, 'destination_row': temp.destination_row, 'destination_column': temp.destination_column};
                 if(currentPlayer === 1) {
-                    if(!board.checkMove({piece : board.getPiece(command.origin_row, command.origin_column), row: command.origin_row, column: command.origin_column}, command.destination_row, command.destination_column)) return;
-                    board.makeMove({piece : board.getPiece(command.origin_row, command.origin_column), row: command.origin_row, column: command.origin_column}, command.destination_row, command.destination_column);
+                    if(!board.checkMove({piece : board.getPiece(command.origin_row, command.origin_column), row: command.origin_row, 
+                        column: command.origin_column}, command.destination_row, command.destination_column)) return;
+                    let blackPiece = board.makeMove({piece : board.getPiece(command.origin_row, command.origin_column), 
+                        row: command.origin_row, column: command.origin_column}, command.destination_row, command.destination_column);
+                    if(blackPiece !== undefined) capturedBlackPieces.push(blackPiece);
+                    if(capturedBlackPieces.length === 16) {
+                        clientSocket.send(JSON.stringify({'command': 'game_end', 'winner_player': 2}));
+                        opponentSocket.send(JSON.stringify({'command': 'game_end', 'winner_player': 2}));
+                    }
                 } else {
                     const movingPiece = {piece: board.getPiece(flippedCommand.origin_row, flippedCommand.origin_column), 
                         row: flippedCommand.origin_row, column: flippedCommand.origin_column};
                     if(!board.checkMove(movingPiece, flippedCommand['destination_row'], flippedCommand['destination_column'])) return;
-                    board.makeMove(movingPiece, flippedCommand['destination_row'], flippedCommand['destination_column']);
+                    let whitePiece = board.makeMove(movingPiece, flippedCommand['destination_row'], flippedCommand['destination_column']);
+                    if(whitePiece !== undefined) capturedWhitePieces.push(whitePiece);
+                    if(capturedWhitePieces.length === 16) {
+                        clientSocket.send(JSON.stringify({'command': 'game_end', 'winner_player': 1}));
+                        opponentSocket.send(JSON.stringify({'command': 'game_end', 'winner_player': 1}));
+                    }
                 }
                 opponentSocket.send(JSON.stringify(flippedCommand));
                 currentPlayer = opponentNumber;   
@@ -83,6 +99,27 @@ function Match(socket1, socket2) {
 
     initClient(socket1, 1);
     initClient(socket2, 2);
+
+    let whiteTimer = 600;
+    let blackTimer = 600;
+
+    let startTimer = () => {
+        setInterval(function() {
+            if(currentPlayer === 1 && whiteTimer > 0) whiteTimer--;
+            else if (currentPlayer !== 1 && blackTimer > 0) blackTimer--;
+            if(whiteTimer === 0 || blackTimer === 0) {
+                if(blackTimer === 0) {
+                    socket1.send(JSON.stringify({'command': 'game_end', 'winner_player': 1}));
+                    socket2.send(JSON.stringify({'command': 'game_end', 'winner_player': 1}));
+                } else (whiteTimer === 0) {
+                    socket1.send(JSON.stringify({'command': 'game_end', 'winner_player': 2}));
+                    socket2.send(JSON.stringify({'command': 'game_end', 'winner_player': 2}));
+                }
+            }
+        }, 1000);
+    };
+
+
 
     socket1.on("message", function (message) {
         screenMessage(socket1, message);

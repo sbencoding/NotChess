@@ -1,6 +1,6 @@
 //@ts-check
 
-function GameState(board, socket, playerNumber, personalColor) {
+function GameState(board, socket, playerNum, personalColor) {
     let personalTimer = 600;
     let enemyTimer = 600;
     let globalTimer = 0;
@@ -10,6 +10,7 @@ function GameState(board, socket, playerNumber, personalColor) {
     let currentPlayer = 1;
     let pieceSelected;
     let playerID;
+    let playerNumber = playerNum;
     let rematchAccepted = false;
 
     let socketSend = (messageObject) => {
@@ -169,6 +170,7 @@ function GameState(board, socket, playerNumber, personalColor) {
             capturedFriendlyPieces.push(friendlyPiece);
             currentPlayer = playerNumber;
         } else if (message.command === 'game_end') {
+            playerNumber = 10;
             if(message.winner_player === playerNumber) displayMessage['gameWon'];
             else displayMessage['gameLost'];
             displayMessage('gameRematch');
@@ -203,6 +205,7 @@ function GameState(board, socket, playerNumber, personalColor) {
         personalTimer = 600;
         enemyTimer = 600;
         currentPlayer = 1;
+        playerNumber = playerNum;
     };
 
     return {
