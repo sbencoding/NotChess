@@ -104,3 +104,9 @@ function getValidMoves(grid, row, col) {
 
     return validators[piece.type]();
 }
+
+if (typeof process === 'object') {
+    module.exports = {
+        getValidMoves
+    };
+}
