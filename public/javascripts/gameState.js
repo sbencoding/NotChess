@@ -25,7 +25,7 @@ function GameState(board, socket, playerNumber, personalColor) {
         }, 2000);
     };
 
-    let rejectDraw = () => {
+    let rejectDraw = (showMessage) => {
         socketSend({'command': 'reject_draw'});
         showMessage(`player${playerNumber}`);
     };
