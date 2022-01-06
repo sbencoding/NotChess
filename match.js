@@ -40,24 +40,26 @@ function Match(socket1, socket2) {
                         column: command.origin_column}, command.destination_row, command.destination_column)) return;
                     let blackPiece = board.makeMove({piece : board.getPiece(command.origin_row, command.origin_column), 
                         row: command.origin_row, column: command.origin_column}, command.destination_row, command.destination_column);
-                    if(blackPiece !== undefined) capturedBlackPieces.push(blackPiece);
+                    if(blackPiece !== null) capturedBlackPieces.push(blackPiece);
                     if(capturedBlackPieces.length === 16) {
                         clientSocket.send(JSON.stringify({'command': 'game_end', 'winner_player': 2}));
                         opponentSocket.send(JSON.stringify({'command': 'game_end', 'winner_player': 2}));
                     }
+                    console.log(capturedBlackPieces.length);
                 } else {
                     const movingPiece = {piece: board.getPiece(flippedCommand.origin_row, flippedCommand.origin_column), 
                         row: flippedCommand.origin_row, column: flippedCommand.origin_column};
                     if(!board.checkMove(movingPiece, flippedCommand['destination_row'], flippedCommand['destination_column'])) return;
                     let whitePiece = board.makeMove(movingPiece, flippedCommand['destination_row'], flippedCommand['destination_column']);
-                    if(whitePiece !== undefined) capturedWhitePieces.push(whitePiece);
+                    if(whitePiece !== null) capturedWhitePieces.push(whitePiece);
                     if(capturedWhitePieces.length === 16) {
                         clientSocket.send(JSON.stringify({'command': 'game_end', 'winner_player': 1}));
                         opponentSocket.send(JSON.stringify({'command': 'game_end', 'winner_player': 1}));
                     }
+                    console.log(capturedWhitePieces.length);
                 }
                 opponentSocket.send(JSON.stringify(flippedCommand));
-                currentPlayer = opponentNumber;   
+                currentPlayer = opponentNumber;  
             },
             offer_draw: () => {
                 opponentSocket.send(JSON.stringify({'command': 'offer_draw'}));
@@ -111,14 +113,14 @@ function Match(socket1, socket2) {
                 if(blackTimer === 0) {
                     socket1.send(JSON.stringify({'command': 'game_end', 'winner_player': 1}));
                     socket2.send(JSON.stringify({'command': 'game_end', 'winner_player': 1}));
-                } else (whiteTimer === 0) {
+                } else {
                     socket1.send(JSON.stringify({'command': 'game_end', 'winner_player': 2}));
                     socket2.send(JSON.stringify({'command': 'game_end', 'winner_player': 2}));
                 }
             }
         }, 1000);
     };
-
+    startTimer();
 
 
     socket1.on("message", function (message) {

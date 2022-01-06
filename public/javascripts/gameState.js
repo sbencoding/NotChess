@@ -171,9 +171,9 @@ function GameState(board, socket, playerNum, personalColor) {
             currentPlayer = playerNumber;
         } else if (message.command === 'game_end') {
             playerNumber = 10;
-            if(message.winner_player === playerNumber) displayMessage['gameWon'];
-            else displayMessage['gameLost'];
-            displayMessage('gameRematch');
+            if(message.winner_player === playerNumber) displayMessage('gameWon');
+            else displayMessage('gameLost');
+            setTimeout(() => {displayMessage('gameRematch')}, 2000);
         } else if (message.command === 'offer_draw') {
             displayMessage('drawPrompt');
         } else if (message.command === 'accept_draw') {
