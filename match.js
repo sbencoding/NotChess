@@ -16,6 +16,7 @@ function match (socket1, socket2) {
                 if(currentPlayer !== 1) return;
                 if(!checkMove({piece : board.getPiece(row, column), row, column}, command.destination_row, command.destination_column)) return;
                 board.makeMove({piece : board.getPiece(row, column), row, column}, command.destination_row, command.destination_column);
+                 //check if all the pieces of the enemy  we're captured to send game_end command.
                 currentPlayer = 2;
             },
             offer_draw: () => {
@@ -50,6 +51,7 @@ function match (socket1, socket2) {
                 if(currentPlayer !== 2) return;
                 if(!checkMove({piece : board.getPiece(row, column), row, column}, command.destination_row, command.destination_column)) return;
                 board.makeMove({piece : board.getPiece(row, column), row, column}, command.destination_row, command.destination_column);
+                //check if all the pieces of the enemy  we're captured to send game_end command.
                 currentPlayer = 1;
             },
             offer_draw: () => {
