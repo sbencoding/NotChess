@@ -28,7 +28,7 @@ function ChessBoard() {
         for (let i = 0; i < 8; ++i) {
             for (let j = 0; j < 8; ++j) {
                 if (cells[i][j] == null || cells[i][j].color !== playingColor) continue;
-                const moves = validator.getValidMoves(cells, i, j);
+                const moves = validator.getValidMoves(cells, i, j, playingColor == 'black');
                 if (moves.enemies.length > 0) return true;
             }
         }
@@ -62,13 +62,13 @@ function ChessBoard() {
             addPiece(7, 2, ChessPiece(playingColor, 'bishop'));
             if (playingColor == 'white') {
                 addPiece(0, 4, ChessPiece(oppositeColor, 'king'));
-                addPiece(7, 3, ChessPiece(playingColor, 'king'));
-                addPiece(0, 4, ChessPiece(oppositeColor, 'queen'));
+                addPiece(7, 4, ChessPiece(playingColor, 'king'));
+                addPiece(0, 3, ChessPiece(oppositeColor, 'queen'));
                 addPiece(7, 3, ChessPiece(playingColor, 'queen'));
             } else {
                 addPiece(0, 3, ChessPiece(oppositeColor, 'king'));
-                addPiece(7, 4, ChessPiece(playingColor, 'king'));
-                addPiece(0, 3, ChessPiece(oppositeColor, 'queen'));
+                addPiece(7, 3, ChessPiece(playingColor, 'king'));
+                addPiece(0, 4, ChessPiece(oppositeColor, 'queen'));
                 addPiece(7, 4, ChessPiece(playingColor, 'queen'));
             }
             addPiece(0, 5, ChessPiece(oppositeColor, 'bishop'));
@@ -122,10 +122,8 @@ function ChessBoard() {
          * @returns a boolean representing the possibility of this move.
          */
         checkMove: (piece, row, col) => {
-            const possibleMoves = validator.getValidMoves(cells, piece.row, piece.column);
-            console.log(possibleMoves);
+            const possibleMoves = validator.getValidMoves(cells, piece.row, piece.column, piece.piece.color == 'black');
             const possibleEnemyHit = canHitEnemy(piece.piece.color);
-            console.log(canHitEnemy);
             if (possibleEnemyHit) {
                 return possibleMoves.enemies.find((arr) => arr[0] == row && arr[1] == col) !== undefined;
             }

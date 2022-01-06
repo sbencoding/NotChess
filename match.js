@@ -48,9 +48,6 @@ function Match(socket1, socket2) {
                 } else {
                     const movingPiece = {piece: board.getPiece(flippedCommand.origin_row, flippedCommand.origin_column), 
                         row: flippedCommand.origin_row, column: flippedCommand.origin_column};
-                    console.log(movingPiece);
-                    console.log(flippedCommand['destination_row']);
-                    console.log(flippedCommand['destination_column']);
                     if(!board.checkMove(movingPiece, flippedCommand['destination_row'], flippedCommand['destination_column'])) return;
                     let whitePiece = board.makeMove(movingPiece, flippedCommand['destination_row'], flippedCommand['destination_column']);
                     if(whitePiece !== undefined) capturedWhitePieces.push(whitePiece);
@@ -59,7 +56,6 @@ function Match(socket1, socket2) {
                         opponentSocket.send(JSON.stringify({'command': 'game_end', 'winner_player': 1}));
                     }
                 }
-                console.log('move relayed');
                 opponentSocket.send(JSON.stringify(flippedCommand));
                 currentPlayer = opponentNumber;   
             },
