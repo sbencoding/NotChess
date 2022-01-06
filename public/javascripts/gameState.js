@@ -12,25 +12,57 @@ function GameState(board, socket, playerNumber, personalColor) {
     let currentPlayer = 1;
     let pieceSelected;
 
+    let socketSend = (messageObject) => {
+        messageObject.player_id = playerID;
+        socket.send(JSON.stringify(messageObject));
+    };
+
+    let acceptDraw = (showMessage) => {
+        socketSend({'command': 'accept_draw'});
+        showMessage('gameDraw');
+        setTimeout(() => {
+            showMessage('gameRematch');
+        }, 2000);
+    };
+
+    let rejectDraw = () => {
+        socketSend({'command': 'reject_draw'});
+        showMessage(`player${playerNumber}`);
+    };
+
+    let acceptRematch = (showMessage) => {
+        socketSend({'command': 'accept_rematch'});
+        showMessage('waitingRematch');
+    };
+
+    let rejectRematch = () => {
+        socketSend({'command': 'reject_rematch'});
+        socket.close();
+        window.location.pathname = '/';
+    };
+
     let displayMessage = function (/** @type {string} */ statusCode) {
         let message = Status[statusCode];
         document.querySelector("#status_message").textContent = message;
+        let buttons = document.querySelector("#message_buttons");
+
         if(statusCode === "drawPrompt" || statusCode === "gameRematch") {
-            let buttons = document.querySelector("#message_buttons");
             buttons.classList.remove("hidden");
+        } else {
+            buttons.classList.add("hidden");
         }
+
         if(statusCode === "drawPrompt") {
             let buttons = document.querySelector("#message_buttons");
-            buttons.querySelector("#yesButton").onclick = acceptDraw;
+            buttons.querySelector("#yesButton").onclick = () => acceptDraw(displayMessage);
             buttons.querySelector("#noButton").onclick = rejectDraw;
         }
         else if (statusCode === "gameRematch") {
             let buttons = document.querySelector("#message_buttons");
-            buttons.querySelector("#yesButton").onclick = acceptRematch;
+            buttons.querySelector("#yesButton").onclick = () => acceptRematch(displayMessage);
             buttons.querySelector("#noButton").onclick = rejectRematch;
         }
     };
-
 
     displayMessage('waitingPlayer');
 
