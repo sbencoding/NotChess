@@ -82,3 +82,4 @@ function Match(socket1, socket2) {
     });
 
 }
+module.exports = Match;

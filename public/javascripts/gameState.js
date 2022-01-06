@@ -43,6 +43,25 @@ function GameState(board, socket, playerNumber, personalColor) {
         capturedFriendlyPieces.push(chessPiece);
     };
 
+    let updateTimer = () => {
+        const prefix = (input) => {
+            const val = input.toString();
+            if (val.length == 1) return '0' + val;
+            return val;
+        };
+        const formatTime = (seconds) => {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds - minutes * 60;
+            return `${prefix(minutes)}:${prefix(remainingSeconds)}`;
+        };
+        const myTime = document.querySelector('#my_timer');
+        const enemyTime = document.querySelector('#enemy_timer');
+        const globalTime = document.querySelector('#timer');
+        myTime.textContent = formatTime(personalTimer);
+        enemyTime.textContent = formatTime(enemyTimer);
+        globalTime.textContent = formatTime(globalTimer);
+    };
+
     let playerMove = function (row, column) {
         document.querySelector("#status_message").textContent = "";
         if(currentPlayer !== playerNumber) return;
@@ -84,6 +103,15 @@ function GameState(board, socket, playerNumber, personalColor) {
         }
         highlightMoves();
     };
+    
+    let startTimer = () => {
+        setInterval(function() {
+            if(currentPlayer === playerNumber && personalTimer > 0) personalTimer--;
+            else if (currentPlayer !== playerNumber && enemyTimer > 0) enemyTimer--;
+            if(personalTimer > 0 && enemyTimer > 0) globalTimer++;
+            updateTimer();
+        }, 1000);
+    };
 
     socket.onmessage = function (event) {
         console.log(event.data);
@@ -94,11 +122,12 @@ function GameState(board, socket, playerNumber, personalColor) {
             playerNumber = message.player_number;
             personalColor = (message.player_number == 1) ? 'white' : 'black';
             board.initBoard(personalColor, playerMove);
+            startTimer();
         }
     };
 
     socket.onopen = function () {
-        socket.send("Hello from the client!");
+        //socket.send("Hello from the client!");
     };
     
     let resetGameState = function () {
@@ -114,11 +143,7 @@ function GameState(board, socket, playerNumber, personalColor) {
 
     return {
         startTimer : function () {
-            setInterval(function() {
-                if(currentPlayer === playerNumber && personalTimer > 0) personalTimer--;
-                else if (currentPlayer !== playerNumber && enemyTimer > 0) enemyTimer--;
-                if(personalTimer > 0 && enemyTimer > 0) globalTimer++;
-            }, 1000);
+            startTimer();
         },
         
         initGame : function () {

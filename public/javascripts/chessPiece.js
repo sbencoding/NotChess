@@ -13,3 +13,7 @@ function ChessPiece(color, type) {
         type
     } 
 }        
+
+if (typeof process === 'object') {
+    module.exports = ChessPiece;
+}

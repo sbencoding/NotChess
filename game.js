@@ -1,3 +1,4 @@
+const Match = require('./match');
 const playerQueue = [];
 const currentGames = [];
 

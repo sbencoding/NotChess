@@ -1,4 +1,5 @@
 const validator = require('./public/javascripts/chessValidation.js');
+const ChessPiece = require('./public/javascripts/chessPiece.js');
 /**
  * This is the chessBoard class, for the object chessBoard used in a match object.
  * @returns void
