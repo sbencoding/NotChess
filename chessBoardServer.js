@@ -122,6 +122,15 @@ function ChessBoard() {
             }
             return possibleMoves.positions.find((arr) => arr[0] == row && arr[1] == col) !== undefined;
         },
+
+        flipPositions: (originalRow, originalColumn, destinationRow, destinationColumn) => {
+            return {
+                'original_row': 7 - originalRow,
+                'original_column': 7 - originalColumn,
+                'destination_row': 7 - destinationRow,
+                'destination_column': 7 - destinationColumn,
+            };
+        },
     };
 }
 
