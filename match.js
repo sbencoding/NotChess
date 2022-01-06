@@ -7,7 +7,10 @@ const ChessBoard = require('./chessBoardServer');
 function Match(socket1, socket2) {
     let capturedBlackPieces = [];
     let capturedWhitePieces = [];
-
+    let whiteTimer = 600;
+    let blackTimer = 600;
+    let board = null;
+    let currentPlayer = 1;
 
     function getRandom() {
         return crypto.randomBytes(60).toString('hex');
@@ -16,7 +19,8 @@ function Match(socket1, socket2) {
     function initClient(socket, playerNumber) {
         socket.gameData = {
             playerNumber,
-            playerId: getRandom()
+            playerId: getRandom(),
+            wantsRematch: false
         }
         socket.send(JSON.stringify({
             'command': 'enter_game',
@@ -25,13 +29,43 @@ function Match(socket1, socket2) {
         }));
     }
 
+    let startTimer = () => {
+        setInterval(function() {
+            if(currentPlayer === 1 && whiteTimer > 0) whiteTimer--;
+            else if (currentPlayer !== 1 && blackTimer > 0) blackTimer--;
+            if(whiteTimer === 0 || blackTimer === 0) {
+                if(blackTimer === 0) {
+                    socket1.send(JSON.stringify({'command': 'game_end', 'winner_player': 1}));
+                    socket2.send(JSON.stringify({'command': 'game_end', 'winner_player': 1}));
+                } else (whiteTimer === 0) {
+                    socket1.send(JSON.stringify({'command': 'game_end', 'winner_player': 2}));
+                    socket2.send(JSON.stringify({'command': 'game_end', 'winner_player': 2}));
+                }
+            }
+        }, 1000);
+    };
+
+    function initMatch() {
+        capturedBlackPieces = [];
+        capturedWhitePieces = [];
+        whiteTimer = 600;
+        blackTimer = 600;
+        currentPlayer = 1;
+
+        // TODO: increment the number of started matches
+        board = ChessBoard();
+        board.initBoard();
+
+        // TODO: upon a rematch maybe flip the player numbers, so the player colors are flipped
+        initClient(socket1, 1);
+        initClient(socket2, 2);
+        startTimer();
+    }
+
     function handleClientMessage(clientSocket, opponentSocket, clientNumber, opponentNumber, command) {
         const messageHandler = {
             make_move: () => {
                 if(currentPlayer !== clientNumber) return;
-                // TODO: the internal board has one orientation with white on the bottom
-                // but the player with black has black on the bottom of the board
-                // so when black makes a move we need to mirror it horizontally
                 let temp = board.flipPositions(command.origin_row, command.origin_column, command.destination_row, command.destination_column);
                 let flippedCommand = {'command': 'make_move', 'player_id': undefined, 'origin_row': temp.origin_row, 
                 'origin_column': temp.origin_column, 'destination_row': temp.destination_row, 'destination_column': temp.destination_column};
@@ -72,7 +106,11 @@ function Match(socket1, socket2) {
                 opponentSocket.send(JSON.stringify({'command': 'resign'}));
             },
             accept_rematch: () => {
+                clientSocket.gameData.wantsRematch = true;
                 opponentSocket.send(JSON.stringify({'command': 'accept_rematch'}));
+                if (clientSocket.gameData.wantsRematch && opponentSocket.gameData.wantsRematch) {
+                    initMatch();
+                }
             },
             reject_rematch: () => {
                 opponentSocket.send(JSON.stringify({'command': 'reject_rematch'}));
@@ -92,34 +130,7 @@ function Match(socket1, socket2) {
         handleClientMessage(socket, opponentSocket, socket.gameData.playerNumber, opponentNumber, message);
     }
 
-    // TODO: increment the number of started matches
-    let board = ChessBoard();
-    let currentPlayer = 1;
-    board.initBoard();
-
-    initClient(socket1, 1);
-    initClient(socket2, 2);
-
-    let whiteTimer = 600;
-    let blackTimer = 600;
-
-    let startTimer = () => {
-        setInterval(function() {
-            if(currentPlayer === 1 && whiteTimer > 0) whiteTimer--;
-            else if (currentPlayer !== 1 && blackTimer > 0) blackTimer--;
-            if(whiteTimer === 0 || blackTimer === 0) {
-                if(blackTimer === 0) {
-                    socket1.send(JSON.stringify({'command': 'game_end', 'winner_player': 1}));
-                    socket2.send(JSON.stringify({'command': 'game_end', 'winner_player': 1}));
-                } else (whiteTimer === 0) {
-                    socket1.send(JSON.stringify({'command': 'game_end', 'winner_player': 2}));
-                    socket2.send(JSON.stringify({'command': 'game_end', 'winner_player': 2}));
-                }
-            }
-        }, 1000);
-    };
-
-
+    initMatch();
 
     socket1.on("message", function (message) {
         screenMessage(socket1, message);
@@ -128,8 +139,6 @@ function Match(socket1, socket2) {
     socket2.on("message", function(message) {
         screenMessage(socket2, message);
     });
-
-
-
 }
+
 module.exports = Match;
