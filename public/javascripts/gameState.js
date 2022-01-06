@@ -1,7 +1,5 @@
 //@ts-check
 
-
-
 function GameState(board, socket, playerNumber, personalColor) {
     let personalTimer = 600;
     let enemyTimer = 600;
@@ -11,6 +9,8 @@ function GameState(board, socket, playerNumber, personalColor) {
     let chatMessages = [];
     let currentPlayer = 1;
     let pieceSelected;
+    let playerID;
+    let rematchAccepted = false;
 
     let socketSend = (messageObject) => {
         messageObject.player_id = playerID;
@@ -112,7 +112,9 @@ function GameState(board, socket, playerNumber, personalColor) {
             if(!board.hasPiece(row, column) || board.getPiece(row, column).color !== personalColor) {
                 if(!board.checkMove(pieceSelected, row, column)) return;
                 else {
-                    let capturedPiece = board.makeMove(pieceSelected, row, column); 
+                    let capturedPiece = board.makeMove(pieceSelected, row, column);
+                    socketSend({'command': 'make_move', 'player_id': playerID, 'origin_row': pieceSelected.row, 
+                    'origin_column': pieceSelected.column, 'destination_row': row, 'destination_column': column}); 
                     if(capturedPiece !== null) capturedEnemyPieces.push(capturedPiece);
                     pieceSelected = undefined;
                     board.deselectBoard();
@@ -155,6 +157,30 @@ function GameState(board, socket, playerNumber, personalColor) {
             personalColor = (message.player_number == 1) ? 'white' : 'black';
             board.initBoard(personalColor, playerMove);
             startTimer();
+            playerID = message.player_id;
+        } else if (message.command === 'make_move') {
+            let piece = board.getPiece(message.origin_row, message.origin_column);
+            let friendlyPiece = board.makeMove(piece, message.destination_row, message.destination_column);
+            capturedFriendlyPieces.push(friendlyPiece);
+        } else if (message.command === 'game_end') {
+            if(message.winner_player === playerNumber) displayMessage['gameWon'];
+            else displayMessage['gameLost'];
+            displayMessage('gameRematch');
+        } else if (message.command === 'offer_draw') {
+            displayMessage('drawPrompt');
+        } else if (message.command === 'accept_draw') {
+            displayMessage('gameDraw');
+            setTimeout(() => {displayMessage('gameRematch')}, 2000);
+        } else if (message.command === 'reject_draw') {
+            displayMessage('drawDenied');
+        } else if (message.command === 'resign') {
+            displayMessage('gameResigned');
+        } else if (message.command === 'accept_rematch') {
+            displayMessage('acceptedRematch');
+        } else if (message.command === 'reject_rematch') {
+            displayMessage('rematchDenied');
+        } else if (message.command === 'send_message') {
+            chatMessages.push(ChatMessage(playerNumber, new Date(), message.message));
         }
     };
 

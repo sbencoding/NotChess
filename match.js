@@ -30,6 +30,8 @@ function Match(socket1, socket2) {
                 // so when black makes a move we need to mirror it horizontally
                 if(!checkMove({piece : board.getPiece(row, column), row, column}, command.destination_row, command.destination_column)) return;
                 board.makeMove({piece : board.getPiece(row, column), row, column}, command.destination_row, command.destination_column);
+                command.player_id = undefined;
+                opponentSocket.send(JSON.stringify(commmand));
                 currentPlayer = opponentNumber;
             },
             offer_draw: () => {
