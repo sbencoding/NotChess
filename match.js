@@ -28,11 +28,22 @@ function Match(socket1, socket2) {
                 // TODO: the internal board has one orientation with white on the bottom
                 // but the player with black has black on the bottom of the board
                 // so when black makes a move we need to mirror it horizontally
-                if(!checkMove({piece : board.getPiece(row, column), row, column}, command.destination_row, command.destination_column)) return;
-                board.makeMove({piece : board.getPiece(row, column), row, column}, command.destination_row, command.destination_column);
-                command.player_id = undefined;
-                opponentSocket.send(JSON.stringify(commmand));
-                currentPlayer = opponentNumber;
+                let temp = board.flipPositions(command.origin_row, command.orgin_column, command.destination_row, command.destination_column);
+                let flippedCommand = {'commmand': 'make_move', 'player_id': undefined, 'origin_row': temp.origin_row, 
+                'origin_column': temp.origin_column, 'destination_row': temp.destination_row, 'destination_column': temp.destination_column};
+                if(currentPlayer === 1) {
+                    if(!checkMove({piece : board.getPiece(row, column), row, column}, command.destination_row, command.destination_column)) return;
+                    board.makeMove({piece : board.getPiece(row, column), row, column}, command.destination_row, command.destination_column);
+                } else {
+                    if(!checkMove({piece: board.getPiece(flippedCommand.origin_row, flippedCommand.origin_column), 
+                        row: flippedCommand.origin_row, column: flippedCommand.origin_column}, flippedCommand['destination_row'], 
+                        flippedCommand['destination_column'])) return;
+                    board.makeMove({piece: board.getPiece(flippedCommand.origin_row, flippedCommand.origin_column), 
+                        row: flippedCommand.origin_row, column: flippedCommand.origin_column}, flippedCommand['destination_row'], 
+                        flippedCommand['destination_column']);
+                } 
+                opponentSocket.send(JSON.stringify(flippedCommand));
+                currentPlayer = opponentNumber;   
             },
             offer_draw: () => {
                 opponentSocket.send(JSON.stringify({'command': 'offer_draw'}));
@@ -82,6 +93,8 @@ function Match(socket1, socket2) {
     socket2.on("message", function(message) {
         screenMessage(socket2, message);
     });
+
+
 
 }
 module.exports = Match;
