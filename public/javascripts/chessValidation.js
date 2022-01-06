@@ -11,16 +11,18 @@ function isEmptyPosition(grid, row, col) {
     return grid[row][col] === null;
 }
 
-function getValidMoves(grid, row, col) {
+function getValidMoves(grid, row, col, flipPawn) {
+    if (flipPawn == undefined) flipPawn = false;
     const piece = grid[row][col];
     const validators = {
         pawn: () => {
             const positions = [];
             const enemies = [];
-            if (boundCheck(row - 1, col) && isEmptyPosition(grid, row - 1, col)) positions.push([row - 1, col]);
-            if (row == 6) positions.push([row - 2, col]);
-            if (boundCheck(row - 1, col - 1) && hasEnemyPiece(grid, row - 1, col - 1, piece.color)) enemies.push([row - 1, col - 1]);
-            if (boundCheck(row - 1, col + 1) && hasEnemyPiece(grid, row - 1, col + 1, piece.color)) enemies.push([row - 1, col + 1]);
+            const pawnDirection = flipPawn ? 1 : -1;
+            if (boundCheck(row + pawnDirection, col) && isEmptyPosition(grid, row + pawnDirection, col)) positions.push([row + pawnDirection, col]);
+            if ((row == 6 && !flipPawn) || (row == 1 && flipPawn)) positions.push([row + 2 * pawnDirection, col]);
+            if (boundCheck(row + pawnDirection, col - 1) && hasEnemyPiece(grid, row + pawnDirection, col - 1, piece.color)) enemies.push([row + pawnDirection, col - 1]);
+            if (boundCheck(row + pawnDirection, col + 1) && hasEnemyPiece(grid, row + pawnDirection, col + 1, piece.color)) enemies.push([row + pawnDirection, col + 1]);
             return {positions, enemies};
         },
         bishop: () => {

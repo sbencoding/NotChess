@@ -37,13 +37,9 @@ function Match(socket1, socket2) {
                 } else {
                     const movingPiece = {piece: board.getPiece(flippedCommand.origin_row, flippedCommand.origin_column), 
                         row: flippedCommand.origin_row, column: flippedCommand.origin_column};
-                    console.log(movingPiece);
-                    console.log(flippedCommand['destination_row']);
-                    console.log(flippedCommand['destination_column']);
                     if(!board.checkMove(movingPiece, flippedCommand['destination_row'], flippedCommand['destination_column'])) return;
                     board.makeMove(movingPiece, flippedCommand['destination_row'], flippedCommand['destination_column']);
                 }
-                console.log('move relayed');
                 opponentSocket.send(JSON.stringify(flippedCommand));
                 currentPlayer = opponentNumber;   
             },
