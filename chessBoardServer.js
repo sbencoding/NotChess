@@ -60,10 +60,17 @@ function ChessBoard() {
             addPiece(7, 1, ChessPiece(playingColor, 'knight'));
             addPiece(0, 2, ChessPiece(oppositeColor, 'bishop'));
             addPiece(7, 2, ChessPiece(playingColor, 'bishop'));
-            addPiece(0, 3, ChessPiece(oppositeColor, 'king'));
-            addPiece(7, 3, ChessPiece(playingColor, 'king'));
-            addPiece(0, 4, ChessPiece(oppositeColor, 'queen'));
-            addPiece(7, 4, ChessPiece(playingColor, 'queen'));
+            if (playingColor == 'white') {
+                addPiece(0, 4, ChessPiece(oppositeColor, 'king'));
+                addPiece(7, 3, ChessPiece(playingColor, 'king'));
+                addPiece(0, 4, ChessPiece(oppositeColor, 'queen'));
+                addPiece(7, 3, ChessPiece(playingColor, 'queen'));
+            } else {
+                addPiece(0, 3, ChessPiece(oppositeColor, 'king'));
+                addPiece(7, 4, ChessPiece(playingColor, 'king'));
+                addPiece(0, 3, ChessPiece(oppositeColor, 'queen'));
+                addPiece(7, 4, ChessPiece(playingColor, 'queen'));
+            }
             addPiece(0, 5, ChessPiece(oppositeColor, 'bishop'));
             addPiece(7, 5, ChessPiece(playingColor, 'bishop'));
             addPiece(0, 6, ChessPiece(oppositeColor, 'knight'));
@@ -116,7 +123,9 @@ function ChessBoard() {
          */
         checkMove: (piece, row, col) => {
             const possibleMoves = validator.getValidMoves(cells, piece.row, piece.column);
+            console.log(possibleMoves);
             const possibleEnemyHit = canHitEnemy(piece.piece.color);
+            console.log(canHitEnemy);
             if (possibleEnemyHit) {
                 return possibleMoves.enemies.find((arr) => arr[0] == row && arr[1] == col) !== undefined;
             }
@@ -125,8 +134,8 @@ function ChessBoard() {
 
         flipPositions: (originalRow, originalColumn, destinationRow, destinationColumn) => {
             return {
-                'original_row': 7 - originalRow,
-                'original_column': 7 - originalColumn,
+                'origin_row': 7 - originalRow,
+                'origin_column': 7 - originalColumn,
                 'destination_row': 7 - destinationRow,
                 'destination_column': 7 - destinationColumn,
             };

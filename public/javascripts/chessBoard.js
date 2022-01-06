@@ -147,10 +147,17 @@ function ChessBoard() {
             addPiece(7, 1, ChessPiece(playingColor, 'knight'));
             addPiece(0, 2, ChessPiece(oppositeColor, 'bishop'));
             addPiece(7, 2, ChessPiece(playingColor, 'bishop'));
-            addPiece(0, 3, ChessPiece(oppositeColor, 'king'));
-            addPiece(7, 3, ChessPiece(playingColor, 'king'));
-            addPiece(0, 4, ChessPiece(oppositeColor, 'queen'));
-            addPiece(7, 4, ChessPiece(playingColor, 'queen'));
+            if (playingColor == 'white') {
+                addPiece(0, 4, ChessPiece(oppositeColor, 'king'));
+                addPiece(7, 4, ChessPiece(playingColor, 'king'));
+                addPiece(0, 3, ChessPiece(oppositeColor, 'queen'));
+                addPiece(7, 3, ChessPiece(playingColor, 'queen'));
+            } else {
+                addPiece(0, 3, ChessPiece(oppositeColor, 'king'));
+                addPiece(7, 3, ChessPiece(playingColor, 'king'));
+                addPiece(0, 4, ChessPiece(oppositeColor, 'queen'));
+                addPiece(7, 4, ChessPiece(playingColor, 'queen'));
+            }
             addPiece(0, 5, ChessPiece(oppositeColor, 'bishop'));
             addPiece(7, 5, ChessPiece(playingColor, 'bishop'));
             addPiece(0, 6, ChessPiece(oppositeColor, 'knight'));

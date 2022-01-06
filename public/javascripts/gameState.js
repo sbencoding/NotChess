@@ -118,6 +118,7 @@ function GameState(board, socket, playerNumber, personalColor) {
                     if(capturedPiece !== null) capturedEnemyPieces.push(capturedPiece);
                     pieceSelected = undefined;
                     board.deselectBoard();
+                    currentPlayer = (playerNumber == 1) ? 2 : 1;
                 }
             } else {
                 if(row === pieceSelected.row && column === pieceSelected.column) {
@@ -159,9 +160,14 @@ function GameState(board, socket, playerNumber, personalColor) {
             startTimer();
             playerID = message.player_id;
         } else if (message.command === 'make_move') {
-            let piece = board.getPiece(message.origin_row, message.origin_column);
+            let piece = {
+                piece: board.getPiece(message.origin_row, message.origin_column),
+                row: message.origin_row,
+                column: message.origin_column
+            };
             let friendlyPiece = board.makeMove(piece, message.destination_row, message.destination_column);
             capturedFriendlyPieces.push(friendlyPiece);
+            currentPlayer = playerNumber;
         } else if (message.command === 'game_end') {
             if(message.winner_player === playerNumber) displayMessage['gameWon'];
             else displayMessage['gameLost'];
