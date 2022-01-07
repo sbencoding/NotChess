@@ -133,7 +133,7 @@ function Match(socket1, socket2, statistics) {
             },
             reject_rematch: () => {
                 opponentSocket.send(JSON.stringify({'command': 'reject_rematch'}));
-
+                endGame();
             },
             send_message: () => {
                 opponentSocket.send(JSON.stringify({'command': 'send_message', 'message': command.message}));
@@ -157,12 +157,25 @@ function Match(socket1, socket2, statistics) {
         }    
     }
 
+    function handleSocketClose(exitingSocket, otherSocket) {
+        if (!matchFinished) otherSocket.send(JSON.stringify({command: 'opponent_left'}));
+        endGame();
+    }
+
     socket1.on("message", function (message) {
         screenMessage(socket1, message);
     });
 
     socket2.on("message", function(message) {
         screenMessage(socket2, message);
+    });
+
+    socket1.on("close", function () {
+        handleSocketClose(socket1, socket2);
+    });
+
+    socket2.on("close", function () {
+        handleSocketClose(socket2, socket1);
     });
 
     initMatch();

@@ -18,6 +18,7 @@ const Status = {
     pieceDenied: "There is one or more enemy piece that can be taken! Please take one! ",
     waitingPlayer: "There are currently no players, waiting for an oponent... ",
     acceptedRematch: "Do you want to play a rematch? \n Your enemy accepted the rematch! ",
-    gameResigned: "You have resigned the game "
+    gameResigned: "You have resigned the game ",
+    opponentLeft: "Your opponent has left the match, you can look for another game"
 };
 
