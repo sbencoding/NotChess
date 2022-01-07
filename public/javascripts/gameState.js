@@ -194,6 +194,7 @@ function GameState(board, socket, playerNum, personalColor) {
             displayMessage('enemyResigned');
             playerNumber = 10;
             setTimeout(() => {displayMessage('gameRematch')}, 2000);
+            clearInterval(timerToken);
         } else if (message.command === 'accept_rematch') {
             displayMessage('acceptedRematch');
         } else if (message.command === 'reject_rematch') {
@@ -223,6 +224,7 @@ function GameState(board, socket, playerNum, personalColor) {
         displayMessage('gameResigned');
         socketSend({'command': 'resign'});
         setTimeout(() => {displayMessage('gameRematch')}, 2000);
+        clearInterval(timerToken);
     };
 
     let offerDraw = () => {
