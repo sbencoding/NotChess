@@ -1,12 +1,14 @@
 const Match = require('./match');
+const GameStatistics = require("./gameStatistics");
 const playerQueue = [];
-const currentGames = [];
+let statistics = GameStatistics();
 
 function matchMake() {
     while (playerQueue.length >= 2) {
         const player1 = playerQueue.shift();
         const player2 = playerQueue.shift();
-        currentGames.push(Match(player1, player2));
+        Match(player1, player2, statistics);
+        statistics.incrementCurrentGames();
     }
 }
 
