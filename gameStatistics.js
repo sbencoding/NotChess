@@ -33,8 +33,4 @@ function GameStatistics() {
     }
 }
 
-<<<<<<< HEAD
 module.exports = GameStatistics;
-=======
-module.exports = GameStatistics;
->>>>>>> e02cca020bd57cc55ce2466310cd67918d7a300a
