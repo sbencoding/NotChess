@@ -222,6 +222,10 @@ function GameState(board, socket, playerNum, personalColor) {
         } else if (message.command === 'send_message') {
             chatMessages.push(ChatMessage(playerNumber === 1 ? 2 : 1, new Date(), message.message));
             updateChatWindow(chatMessages[chatMessages.length - 1]);
+        } else if (message.command === 'opponent_left') {
+            displayMessage('opponentLeft');
+            playerNumber = 10;
+            clearInterval(timerToken);
         }
     };
 
