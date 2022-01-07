@@ -184,15 +184,16 @@ function GameState(board, socket, playerNum, personalColor) {
         } else if (message.command === 'offer_draw') {
             displayMessage('drawPrompt');
         } else if (message.command === 'accept_draw') {
-            displayMessage('gameDraw');
+            displayMessage('gameDraw');d
             setTimeout(() => {displayMessage('gameRematch')}, 2000);
             clearInterval(timerToken);
         } else if (message.command === 'reject_draw') {
             displayMessage('drawDenied');
             setTimeout(() => {displayMessage(`player${playerNumber}`)}, 2000);
         } else if (message.command === 'resign') {
-            displayMessage('gameResigned');
-            clearInterval(timerToken);
+            displayMessage('enemyResigned');
+            playerNumber = 10;
+            setTimeout(() => {displayMessage('gameRematch')}, 2000);
         } else if (message.command === 'accept_rematch') {
             displayMessage('acceptedRematch');
         } else if (message.command === 'reject_rematch') {
@@ -219,7 +220,9 @@ function GameState(board, socket, playerNum, personalColor) {
     };
 
     let resign = () => {
+        displayMessage('gameResigned');
         socketSend({'command': 'resign'});
+        setTimeout(() => {displayMessage('gameRematch')}, 2000);
     };
 
     let offerDraw = () => {
