@@ -4,7 +4,7 @@ const ChessBoard = require('./chessBoardServer');
  * This is the class for the chess match
  */
 
-function Match(socket1, socket2) {
+function Match(socket1, socket2, statistics) {
     let capturedBlackPieces = [];
     let capturedWhitePieces = [];
     let board;
@@ -13,6 +13,7 @@ function Match(socket1, socket2) {
     let blackTimer;
     let timerToken;
     let numMatches = 0;
+    let matchFinished = false;
 
     function getRandom() {
         return crypto.randomBytes(60).toString('hex');
@@ -46,6 +47,7 @@ function Match(socket1, socket2) {
     };
 
     function initMatch() {
+        statistics.incrementTotalGames();
         numMatches++;
         let player1Color = ((numMatches % 2) === 1) ? 1 : 2;
         let player2Color = (player1Color === 1) ? 2 : 1;  
@@ -82,7 +84,10 @@ function Match(socket1, socket2) {
                         column: command.origin_column}, command.destination_row, command.destination_column)) return;
                     let blackPiece = board.makeMove({piece : board.getPiece(command.origin_row, command.origin_column), 
                         row: command.origin_row, column: command.origin_column}, command.destination_row, command.destination_column);
-                    if(blackPiece !== null) capturedBlackPieces.push(blackPiece);
+                    if(blackPiece !== null) {
+                        capturedBlackPieces.push(blackPiece);
+                        statistics.incrementTotalPieces();
+                    }    
                     if(capturedBlackPieces.length === 16) {
                         clientSocket.send(JSON.stringify({'command': 'game_end', 'winner_player': 2}));
                         opponentSocket.send(JSON.stringify({'command': 'game_end', 'winner_player': 2}));
@@ -93,7 +98,10 @@ function Match(socket1, socket2) {
                         row: flippedCommand.origin_row, column: flippedCommand.origin_column};
                     if(!board.checkMove(movingPiece, flippedCommand['destination_row'], flippedCommand['destination_column'])) return;
                     let whitePiece = board.makeMove(movingPiece, flippedCommand['destination_row'], flippedCommand['destination_column']);
-                    if(whitePiece !== null) capturedWhitePieces.push(whitePiece);
+                    if(whitePiece !== null) {
+                        capturedWhitePieces.push(whitePiece);
+                        statistics.incrementTotalPieces();
+                    }    
                     if(capturedWhitePieces.length === 16) {
                         clientSocket.send(JSON.stringify({'command': 'game_end', 'winner_player': 1}));
                         opponentSocket.send(JSON.stringify({'command': 'game_end', 'winner_player': 1}));
@@ -125,6 +133,7 @@ function Match(socket1, socket2) {
             },
             reject_rematch: () => {
                 opponentSocket.send(JSON.stringify({'command': 'reject_rematch'}));
+
             },
             send_message: () => {
                 opponentSocket.send(JSON.stringify({'command': 'send_message', 'message': command.message}));
@@ -139,6 +148,13 @@ function Match(socket1, socket2) {
         const opponentSocket = (socket == socket1) ? socket2 : socket1;
         const opponentNumber = (socket.gameData.playerNumber == 1) ? 2 : 1;
         handleClientMessage(socket, opponentSocket, socket.gameData.playerNumber, opponentNumber, message);
+    }
+
+    function endGame() {
+        if(!matchFinished) {
+            statistics.decrementCurrentGames();
+            matchFinished = true;
+        }    
     }
 
     socket1.on("message", function (message) {

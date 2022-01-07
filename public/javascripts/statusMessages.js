@@ -12,7 +12,7 @@ const Status = {
     gameRematch: "Do you want to play a rematch? ",
     player1: "You are player 1, you start with the whites! ",
     player2: "You are player 2, you'll play the blacks! ",
-    enemyResigned: "Your enemy resigned the game, you won! Go back to find another player! ",
+    enemyResigned: "Your enemy resigned the game, you won! ",
     waitingRematch: "Your enemy is still deciding if he wants a rematch! ",
     rematchDenied: "Your enemy left. Go back to find another player! ",
     pieceDenied: "There is one or more enemy piece that can be taken! Please take one! ",
