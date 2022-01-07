@@ -1,7 +1,10 @@
 const Match = require('./match');
-const GameStatistics = require("./gameStatistics");
 const playerQueue = [];
-let statistics = GameStatistics();
+let statistics;
+
+function setStatistics(value) {
+    statistics = value;
+}
 
 function matchMake() {
     while (playerQueue.length >= 2) {
@@ -26,5 +29,6 @@ function incomingMessage(data) {
 
 module.exports = {
     addClient,
-    incomingMessage
+    incomingMessage,
+    setStatistics
 };

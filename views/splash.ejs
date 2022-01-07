@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>NotChess</title>
+    </head>
+    
+    <body>
+        <main>
+            <section id="Horizontal middle">
+                <div id="left">
+                    <form action="/play" method="get">
+                        <button type="submit">Play NotChess</button>
+                    </form>
+                    <form action="/tutorial" method="get">
+                        <button type="submit">How to play?</button>
+                    </form>    
+                    <form action="/support" method="get">
+                        <button type="submit">Support NotChess</button>
+                    </form>
+                </div>
+                <div id="Vertical middle">
+                    <img rel="logo" src="images/logo.svg" width="400" height="400"/>
+                    <h1>NotChess</h1>
+                </div>
+                <div id="right middle">
+                    <h2>Are you tired of Losing?<br>Then capitalize on your<br>skills and win something!</h2>
+                </div>    
+            </section>
+            <footer>
+                <div id="left">
+                    <img rel="chess_board" src="images/chess_board_icon.svg" width="75" height="75"/>
+                    <h2>Games played: <br> <%= games_played %></h2>
+                </div>
+                <div id="middle">
+                    <img rel="player_icon" src="images/chess_player_icon.svg" width="75" height="75"/>
+                    <h2>Games being played: <br> <%= games_playing %></h2>
+                </div>
+                <div id="right">
+                    <img rel="piece_icon" src="images/chess_piece_icon.svg" width="75" height="75"/>
+                    <h2>Pieces taken: <br> <%= pieces_taken %></h2>
+                </div>
+            </footer>
+        </main>
+    </body>
+</html>

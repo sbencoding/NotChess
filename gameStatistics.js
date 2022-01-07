@@ -32,3 +32,5 @@ function GameStatistics() {
         }
     }
 }
+
+module.exports = GameStatistics;
