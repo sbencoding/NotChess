@@ -17,6 +17,6 @@ const Status = {
     rematchDenied: "Your enemy left. Go back to find another player! ",
     pieceDenied: "There is one or more enemy piece that can be taken! Please take one! ",
     waitingPlayer: "There are currently no players, waiting for an oponent... ",
-    acceptedRematch: "Do you want to play a rematch? <br> Your enemy accepted the rematch! "
+    acceptedRematch: "Do you want to play a rematch? \n Your enemy accepted the rematch! "
 };
 
