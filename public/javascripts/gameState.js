@@ -170,9 +170,9 @@ function GameState(board, socket, playerNum, personalColor) {
             capturedFriendlyPieces.push(friendlyPiece);
             currentPlayer = playerNumber;
         } else if (message.command === 'game_end') {
-            playerNumber = 10;
             if(message.winner_player === playerNumber) displayMessage('gameWon');
             else displayMessage('gameLost');
+            playerNumber = 10;
             setTimeout(() => {displayMessage('gameRematch')}, 2000);
         } else if (message.command === 'offer_draw') {
             displayMessage('drawPrompt');
