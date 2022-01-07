@@ -7,13 +7,18 @@ const movingSound = new Audio("audio/chess_piece_sound.wav");
 
 function ChessBoard() {
     let cells = [];
-    for (let i = 0; i < 8; ++i) {
-        let row = [];
-        for (let j = 0; j < 8; ++j) {
-            row.push(null)
+    const initCells = () => {
+        cells = [];
+        for (let i = 0; i < 8; ++i) {
+            let row = [];
+            for (let j = 0; j < 8; ++j) {
+                row.push(null)
+            }
+            cells.push(row);
         }
-        cells.push(row);
-    }
+    };
+
+    initCells();
 
     const addPiece = (row, col, piece) => {
         cells[row][col] = piece;
@@ -140,6 +145,7 @@ function ChessBoard() {
          * @param {*} eventHandler the function that makes the player moves, considering chess contingencies
          */
         initBoard: (playingColor, eventHandler) => {
+            initCells();
             const oppositeColor = (playingColor == 'white') ? 'black' : 'white';
             addPiece(0, 0, ChessPiece(oppositeColor, 'rook'));
             addPiece(7, 0, ChessPiece(playingColor, 'rook'));

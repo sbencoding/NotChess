@@ -12,6 +12,7 @@ function GameState(board, socket, playerNum, personalColor) {
     let playerID;
     let playerNumber = playerNum;
     let rematchAccepted = false;
+    let timerToken;
 
     let socketSend = (messageObject) => {
         messageObject.player_id = playerID;
@@ -20,6 +21,7 @@ function GameState(board, socket, playerNum, personalColor) {
 
     let acceptDraw = (showMessage) => {
         socketSend({'command': 'accept_draw'});
+        clearInterval(timerToken);
         showMessage('gameDraw');
         setTimeout(() => {
             showMessage('gameRematch');
@@ -46,8 +48,8 @@ function GameState(board, socket, playerNum, personalColor) {
         let message = Status[statusCode];
         document.querySelector("#status_message").textContent = message;
         let buttons = document.querySelector("#message_buttons");
-        if(statusCode === "resign") playerNumber = 10;
-        if(statusCode === "drawPrompt" || statusCode === "gameRematch" || "acceptedRematch") {
+
+        if(statusCode === "drawPrompt" || statusCode === "gameRematch" || statusCode === "acceptedRematch") {
             buttons.classList.remove("hidden");
         } else {
             buttons.classList.add("hidden");
@@ -141,7 +143,7 @@ function GameState(board, socket, playerNum, personalColor) {
     };
     
     let startTimer = () => {
-        setInterval(function() {
+        return setInterval(function() {
             if(currentPlayer === playerNumber && personalTimer > 0) personalTimer--;
             else if (currentPlayer !== playerNumber && enemyTimer > 0) enemyTimer--;
             if(personalTimer > 0 && enemyTimer > 0) globalTimer++;
@@ -158,8 +160,12 @@ function GameState(board, socket, playerNum, personalColor) {
             playerNumber = message.player_number;
             personalColor = (message.player_number == 1) ? 'white' : 'black';
             board.initBoard(personalColor, playerMove);
-            startTimer();
+            timerToken = startTimer();
             playerID = message.player_id;
+            currentPlayer = 1;
+            personalTimer = 600;
+            enemyTimer = 600;
+            globalTimer = 0;
         } else if (message.command === 'make_move') {
             let piece = {
                 piece: board.getPiece(message.origin_row, message.origin_column),
@@ -174,11 +180,13 @@ function GameState(board, socket, playerNum, personalColor) {
             else displayMessage('gameLost');
             playerNumber = 10;
             setTimeout(() => {displayMessage('gameRematch')}, 2000);
+            clearInterval(timerToken);
         } else if (message.command === 'offer_draw') {
             displayMessage('drawPrompt');
         } else if (message.command === 'accept_draw') {
             displayMessage('gameDraw');d
             setTimeout(() => {displayMessage('gameRematch')}, 2000);
+            clearInterval(timerToken);
         } else if (message.command === 'reject_draw') {
             displayMessage('drawDenied');
             setTimeout(() => {displayMessage(`player${playerNumber}`)}, 2000);
@@ -230,7 +238,7 @@ function GameState(board, socket, playerNum, personalColor) {
 
     return {
         startTimer : function () {
-            startTimer();
+            timerToken = startTimer();
         },
         
         initGame : function () {
