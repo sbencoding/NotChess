@@ -151,6 +151,26 @@ function GameState(board, socket, playerNum, personalColor) {
         }, 1000);
     };
 
+    let updateChatWindow = (chatMessage) => {
+        const chatWindow = document.querySelector('#chat_window');
+        const container = document.createElement('div');
+        const textNode = document.createTextNode(chatMessage.message);
+        const messageType = (chatMessage.sender === playerNumber) ? 'my_message' : 'enemy_message';
+        container.classList.add(messageType);
+        container.appendChild(textNode);
+        chatWindow.appendChild(container);
+    };
+
+    let chatMessageHandler = (event) => {
+        if (event.key === 'Enter') {
+            const message = ChatMessage(playerNumber, new Date(), event.target.value);
+            chatMessages.push(message);
+            updateChatWindow(message);
+            socketSend({command: 'send_message', message: message.message});
+            event.target.value = '';
+        }
+    };
+
     socket.onmessage = function (event) {
         console.log(event.data);
         const message = JSON.parse(event.data);
@@ -200,7 +220,8 @@ function GameState(board, socket, playerNum, personalColor) {
         } else if (message.command === 'reject_rematch') {
             displayMessage('rematchDenied');
         } else if (message.command === 'send_message') {
-            chatMessages.push(ChatMessage(playerNumber, new Date(), message.message));
+            chatMessages.push(ChatMessage(playerNumber === 1 ? 2 : 1, new Date(), message.message));
+            updateChatWindow(chatMessages[chatMessages.length - 1]);
         }
     };
 
@@ -231,11 +252,13 @@ function GameState(board, socket, playerNum, personalColor) {
         socketSend({'command': 'offer_draw'});
     };
 
-    let registerActionButtons = () => {
+    let registerUserEvents = () => {
         const resignButton = document.querySelector('#resignButton');
         resignButton.onclick = resign;
         const drawButton = document.querySelector('#drawButton');
         drawButton.onclick = offerDraw;
+        const chatBox = document.querySelector('#chat_box');
+        chatBox.addEventListener('keyup', chatMessageHandler);
     };
 
     return {
@@ -245,7 +268,7 @@ function GameState(board, socket, playerNum, personalColor) {
         
         initGame : function () {
             board.initBoard(personalColor, playerMove);
-            registerActionButtons();
+            registerUserEvents();
         }
     };
 }
