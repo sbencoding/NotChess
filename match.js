@@ -12,6 +12,7 @@ function Match(socket1, socket2) {
     let whiteTimer;
     let blackTimer;
     let timerToken;
+    let numMatches = 0;
 
     function getRandom() {
         return crypto.randomBytes(60).toString('hex');
@@ -45,6 +46,10 @@ function Match(socket1, socket2) {
     };
 
     function initMatch() {
+        numMatches++;
+        let player1Color = ((numMatches % 2) === 1) ? 1 : 2;
+        let player2Color = (player1Color === 1) ? 2 : 1;  
+
         capturedBlackPieces = [];
         capturedWhitePieces = [];
 
@@ -54,8 +59,8 @@ function Match(socket1, socket2) {
         board.initBoard();
 
         // TODO: maybe change player number so that color also changes
-        initClient(socket1, 1);
-        initClient(socket2, 2);
+        initClient(socket1, player1Color);
+        initClient(socket2, player2Color);
 
         whiteTimer = 600;
         blackTimer = 600;
