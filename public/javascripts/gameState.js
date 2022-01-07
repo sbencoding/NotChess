@@ -56,7 +56,7 @@ function GameState(board, socket, playerNum, personalColor) {
         if(statusCode === "drawPrompt") {
             let buttons = document.querySelector("#message_buttons");
             buttons.querySelector("#yesButton").onclick = () => acceptDraw(displayMessage);
-            buttons.querySelector("#noButton").onclick = rejectDraw;
+            buttons.querySelector("#noButton").onclick = () => rejectDraw(displayMessage);
         }
         else if (statusCode === "gameRematch") {
             let buttons = document.querySelector("#message_buttons");
@@ -181,6 +181,7 @@ function GameState(board, socket, playerNum, personalColor) {
             setTimeout(() => {displayMessage('gameRematch')}, 2000);
         } else if (message.command === 'reject_draw') {
             displayMessage('drawDenied');
+            setTimeout(() => {displayMessage(`player${playerNumber}`)}, 2000);
         } else if (message.command === 'resign') {
             displayMessage('gameResigned');
         } else if (message.command === 'accept_rematch') {
@@ -208,6 +209,21 @@ function GameState(board, socket, playerNum, personalColor) {
         playerNumber = playerNum;
     };
 
+    let resign = () => {
+        socketSend({'command': 'resign'});
+    };
+
+    let offerDraw = () => {
+        socketSend({'command': 'offer_draw'});
+    };
+
+    let registerActionButtons = () => {
+        const resignButton = document.querySelector('#resignButton');
+        resignButton.onclick = resign;
+        const drawButton = document.querySelector('#drawButton');
+        drawButton.onclick = offerDraw;
+    };
+
     return {
         startTimer : function () {
             startTimer();
@@ -215,6 +231,7 @@ function GameState(board, socket, playerNum, personalColor) {
         
         initGame : function () {
             board.initBoard(personalColor, playerMove);
+            registerActionButtons();
         }
     };
 }

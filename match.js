@@ -111,6 +111,7 @@ function Match(socket1, socket2) {
                 opponentSocket.send(JSON.stringify({'command': 'resign'}));
             },
             accept_rematch: () => {
+                // TODO: block this command unless the game has ended really
                 opponentSocket.send(JSON.stringify({'command': 'accept_rematch'}));
                 clientSocket.gameData.wantsRematch = true;
                 if (clientSocket.gameData.wantsRematch && opponentSocket.gameData.wantsRematch) {
