@@ -1,3 +1,109 @@
+#logo {
+    transform: scaleY(-1);
+}
+
+#app_name {
+    padding-top: 8px;
+}
+
+body {
+    background-color: #91C7F5;
+}
+
+footer {
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+}
+
+button {
+    width: 300px;
+    background-color: #FFA710;
+    border: none;
+    padding: 20px 50px 20px 50px;
+    font-family: "Clarendon-Bold";
+}
+
+#supportButton {
+    margin-left: auto;
+}
+
+#resignButton {
+    margin-top: 70px;
+    margin-bottom: 20px;
+}
+
+#timer {
+    position: absolute;
+    right: 0;
+    margin-right: 5px;
+}
+
+article {
+    display: flex;
+    flex-direction: row;
+}
+
+article > section {
+    flex: 1;
+}
+
+#chat_part {
+    flex: 2;
+}
+
+#chess_window {
+    flex: 4;
+}
+
+#player_timer {
+    flex: 1;
+    position: relative;
+}
+
+#actions {
+    flex: 1;
+    text-align: center;
+}
+
+#my_timer {
+    position: absolute;
+    bottom: 0;
+}
+
+#chat_window {
+    height: 95%;
+    width: 100%;
+    background-color: green;
+}
+
+#chat_box {
+    margin-top: 5px;
+    width: calc(100% - 7px);
+}
+
+#chess_board > table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#captured_friendly_pieces, #captured_enemy_pieces {
+    background-color: red;
+    height: 80px;
+    width: 512px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 /* TODO: td gets height dynamically*/
 td {
     width: 64px;
@@ -26,6 +132,16 @@ tr:nth-child(2n) td:nth-child(2n+1).dimmed {
 
 tr:nth-child(2n+1) td:nth-child(2n).dimmed {
     background-color: #223e9c;
+}
+
+tr:nth-child(2n) td:nth-child(2n) {
+    /*instead of white square*/
+    background-color: white;
+}
+
+tr:nth-child(2n+1) td:nth-child(2n+1) {
+    /*instead of white square*/
+    background-color: white;
 }
 
 tr:nth-child(2n) td:nth-child(2n).dimmed {

@@ -8,14 +8,16 @@
 
     <body>
         <header>
-            <a href="/"><img src="images/logo.svg" width=64 height=64 /></a>
-            <p>NotChess</p>
+            <a href="/"><img id="logo" src="images/logo.svg" width=64 height=64 /></a>
+            <p id="app_name">NotChess</p>
             <p id="timer">05:30</p>
         </header>
         <article>
-            <section id="chat_window">
+            <section id="chat_part">
+                <section id="chat_window">
+                </section>
+                <input id="chat_box" type="text" placeholder="Type your message" />
             </section>
-            <input id="chat_box" type="text" placeholder="Type your message" />
             <section id="chess_window">
                 <section id="captured_friendly_pieces">
                 </section>
@@ -148,15 +150,15 @@
                 <button id="resignButton">Resign</button>
                 <button id="drawButton">Offer draw</button>
             </aside>
-            <p id="status_message"></p>
-            <div id="message_buttons" class="hidden">
-                <button id="yesButton">Yes</button>
-                <button id="noButton">No</button>
-            </div>
         </article>
+        <p id="status_message"></p>
+        <div id="message_buttons" class="hidden">
+            <button id="yesButton">Yes</button>
+            <button id="noButton">No</button>
+        </div>
         <footer>
             <p>Copyright © 2021 NotChess All rights reserved.</p>
-            <button>Support NotChess</button>
+            <button id="supportButton">Support NotChess</button>
         </footer>
         <script src="javascripts/statusMessages.js"></script>
         <script src="javascripts/chatMessage.js"></script>
