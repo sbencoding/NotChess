@@ -47,7 +47,7 @@ h1 {
     transform: scaleY(-1);
 }
 
-#left, #right_middle {
+#left_middle, #right_middle {
     margin-top: auto;
     margin-bottom: auto;
     text-align: center;
