@@ -48,6 +48,16 @@ button {
     margin-right: 5px;
 }
 
+.my_message {
+    align-self: flex-start;
+    padding: 5px;
+}
+
+.enemy_message {
+    align-self: flex-end;
+    padding: 5px;
+}
+
 article {
     display: flex;
     flex-direction: row;
@@ -82,13 +92,15 @@ article > section {
 
 #chat_window {
     height: 95%;
-    width: 100%;
-    background-color: green;
+    width: 95%;
+    background-color: #F1F1F1;
+    display: flex;
+    flex-flow: column nowrap;
 }
 
 #chat_box {
     margin-top: 5px;
-    width: calc(100% - 7px);
+    width: calc(95% - 7px);
 }
 
 #chess_board > table {
