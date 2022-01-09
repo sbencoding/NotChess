@@ -74,8 +74,22 @@ function GameState(board, socket, playerNum, personalColor) {
         board.highlightMoves(pieceSelected);
     };
 
+    let updCaptured = (chessPiece, arr, selector) => {
+        arr.push(chessPiece);
+        const ui = document.querySelector(selector);
+        const img = document.createElement('img');
+        img.src = chessPiece.url;
+        // TODO: what's a good size? this way all pieces (16) fit in a single row
+        img.width = 30;
+        img.height = 30;
+        ui.appendChild(img);
+    };
     let updFriendlyPieces = function (chessPiece) {
-        capturedFriendlyPieces.push(chessPiece);
+        updCaptured(chessPiece, capturedFriendlyPieces, '#captured_friendly_pieces');
+    };
+
+    let updEnemyPieces = function (chessPiece) {
+        updCaptured(chessPiece, capturedEnemyPieces, '#captured_enemy_pieces');
     };
 
     let updateTimer = () => {
@@ -118,7 +132,7 @@ function GameState(board, socket, playerNum, personalColor) {
                     let capturedPiece = board.makeMove(pieceSelected, row, column);
                     socketSend({'command': 'make_move', 'player_id': playerID, 'origin_row': pieceSelected.row, 
                     'origin_column': pieceSelected.column, 'destination_row': row, 'destination_column': column}); 
-                    if(capturedPiece !== null) capturedEnemyPieces.push(capturedPiece);
+                    if(capturedPiece !== null) updEnemyPieces(capturedPiece);
                     pieceSelected = undefined;
                     board.deselectBoard();
                     currentPlayer = (playerNumber == 1) ? 2 : 1;
@@ -171,21 +185,37 @@ function GameState(board, socket, playerNum, personalColor) {
         }
     };
 
+    let resetCapturedPieces = () => {
+        const friendly = document.querySelector('#captured_friendly_pieces');
+        while (friendly.firstElementChild) friendly.removeChild(friendly.firstElementChild);
+        const enemy = document.querySelector('#captured_enemy_pieces');
+        while (enemy.firstElementChild) enemy.removeChild(enemy.firstElementChild);
+    };
+
+    let resetGameState = function () {
+        board.initBoard(personalColor, playerMove);
+        capturedFriendlyPieces = [];
+        capturedEnemyPieces = [];
+        resetCapturedPieces();
+        pieceSelected = undefined;
+        globalTimer = 0;
+        personalTimer = 600;
+        enemyTimer = 600;
+        currentPlayer = 1;
+        playerNumber = playerNum;
+        timerToken = startTimer();
+    };
+
     socket.onmessage = function (event) {
         console.log(event.data);
         const message = JSON.parse(event.data);
         if (message.command === 'enter_game') {
             console.log('starting game');
             displayMessage(`player${message.player_number}`);
-            playerNumber = message.player_number;
+            playerNum = message.player_number;
             personalColor = (message.player_number == 1) ? 'white' : 'black';
-            board.initBoard(personalColor, playerMove);
-            timerToken = startTimer();
             playerID = message.player_id;
-            currentPlayer = 1;
-            personalTimer = 600;
-            enemyTimer = 600;
-            globalTimer = 0;
+            resetGameState();
         } else if (message.command === 'make_move') {
             let piece = {
                 piece: board.getPiece(message.origin_row, message.origin_column),
@@ -193,7 +223,8 @@ function GameState(board, socket, playerNum, personalColor) {
                 column: message.origin_column
             };
             let friendlyPiece = board.makeMove(piece, message.destination_row, message.destination_column);
-            capturedFriendlyPieces.push(friendlyPiece);
+            //capturedFriendlyPieces.push(friendlyPiece);
+            if (friendlyPiece !== null) updFriendlyPieces(friendlyPiece);
             currentPlayer = playerNumber;
         } else if (message.command === 'game_end') {
             if(message.winner_player === playerNumber) displayMessage('gameWon');
@@ -231,18 +262,6 @@ function GameState(board, socket, playerNum, personalColor) {
 
     socket.onopen = function () {
         //socket.send("Hello from the client!");
-    };
-    
-    let resetGameState = function () {
-        board.initBoard(personalColor, playerMove);
-        capturedFriendlyPieces = [];
-        capturedEnemyPieces = [];
-        pieceSelected = undefined;
-        globalTimer = 0;
-        personalTimer = 600;
-        enemyTimer = 600;
-        currentPlayer = 1;
-        playerNumber = playerNum;
     };
 
     let resign = () => {

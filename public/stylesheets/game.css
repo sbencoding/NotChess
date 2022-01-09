@@ -109,8 +109,8 @@ article > section {
 }
 
 #captured_friendly_pieces, #captured_enemy_pieces {
-    background-color: red;
-    height: 80px;
+    /*background-color: #F1F1F1;*/
+    height: 40px;
     width: 512px;
     margin-left: auto;
     margin-right: auto;
