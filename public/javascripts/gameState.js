@@ -204,7 +204,7 @@ function GameState(board, socket, playerNum, personalColor) {
         } else if (message.command === 'offer_draw') {
             displayMessage('drawPrompt');
         } else if (message.command === 'accept_draw') {
-            displayMessage('gameDraw');d
+            displayMessage('gameDraw');
             setTimeout(() => {displayMessage('gameRematch')}, 2000);
             clearInterval(timerToken);
         } else if (message.command === 'reject_draw') {
