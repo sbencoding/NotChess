@@ -1,5 +1,7 @@
-const validator = require('./public/javascripts/chessValidation.js');
+// Local (shared) imports
+const Validator = require('./public/javascripts/chessValidation.js');
 const ChessPiece = require('./public/javascripts/chessPiece.js');
+
 /**
  * This is the chessBoard class, for the object chessBoard used in a match object.
  * @returns void
@@ -19,6 +21,12 @@ function ChessBoard() {
 
     initCells();
 
+    /**
+     * Add a new piece to the board
+     * @param {number} row The zero based row index where the piece is to be
+     * @param {number} col The zero based column index where the piece is to be
+     * @param {ChessPiece} piece The chess piece to add to the board
+     */
     const addPiece = (row, col, piece) => {
         cells[row][col] = piece;
     };
@@ -28,12 +36,11 @@ function ChessBoard() {
      * @param {*} playingColor to color of the pieces of the player 
      * @returns a boolean indicating if the player can take an enemy piece
      */
-
     const canHitEnemy = (playingColor) => {
         for (let i = 0; i < 8; ++i) {
             for (let j = 0; j < 8; ++j) {
                 if (cells[i][j] == null || cells[i][j].color !== playingColor) continue;
-                const moves = validator.getValidMoves(cells, i, j, playingColor == 'black');
+                const moves = Validator.getValidMoves(cells, i, j, playingColor == 'black');
                 if (moves.enemies.length > 0) return true;
             }
         }
@@ -52,9 +59,7 @@ function ChessBoard() {
         },
 
         /**
-         * This function initializes the board with all the pieces with the correct colors
-         * @param {*} playingColor the color of the player
-         * @param {*} eventHandler the function that makes the player moves, considering chess contingencies
+         * This function initializes the board with all the pieces with white at the bottom
          */
         initBoard: () => {
             initCells();
@@ -89,16 +94,37 @@ function ChessBoard() {
                 addPiece(6, i, ChessPiece(playingColor, 'pawn'));
             }
         },
+
+        /**
+         * Print the current state of the board to the console
+         */
         printBoard: () => {
             console.log(cells);
         },
+
+        /**
+         * Check if there's a piece at a given position
+         * @param {number} row The zero based row index to check
+         * @param {number} col The zero based column index to check
+         * @returns {boolean} True if the position contains a piece, otherwise false
+         */
         hasPiece: (row, col) => {
             return cells[row][col] !== null;
         },
+
+        /**
+         * Get a piece currently on the board
+         * @param {number} row The zero based row index where the piece is
+         * @param {number} col The zero based column index where the piece is
+         * @returns {ChessPiece} piece The chess piece at the specified location or null if empty
+         */
         getPiece: (row, col) => {
             return cells[row][col];
         },
 
+        /**
+         * Get the current state of the board
+         */
         getCells: () => {
             return cells;
         },
@@ -110,7 +136,6 @@ function ChessBoard() {
          * @param {*} col the column to be moved to
          * @returns the enemy piece that might have been replaced by the moved piece
          */
-
         makeMove: (piece, row, col) => {
             const target = cells[row][col];
             const current = cells[piece.row][piece.column];
@@ -128,7 +153,7 @@ function ChessBoard() {
          * @returns a boolean representing the possibility of this move.
          */
         checkMove: (piece, row, col) => {
-            const possibleMoves = validator.getValidMoves(cells, piece.row, piece.column, piece.piece.color == 'black');
+            const possibleMoves = Validator.getValidMoves(cells, piece.row, piece.column, piece.piece.color == 'black');
             const possibleEnemyHit = canHitEnemy(piece.piece.color);
             if (possibleEnemyHit) {
                 return possibleMoves.enemies.find((arr) => arr[0] == row && arr[1] == col) !== undefined;
@@ -136,6 +161,14 @@ function ChessBoard() {
             return possibleMoves.positions.find((arr) => arr[0] == row && arr[1] == col) !== undefined;
         },
 
+        /**
+         * Get the position of a piece as if the board was flipped horizontally
+         * @param {*} originalRow The row the piece is moving from
+         * @param {*} originalColumn The column the piece is moving from
+         * @param {*} destinationRow The row the piece is moving to
+         * @param {*} destinationColumn The column the piece is moving to
+         * @returns An object containing the four flipped indicies
+         */
         flipPositions: (originalRow, originalColumn, destinationRow, destinationColumn) => {
             return {
                 'origin_row': 7 - originalRow,
@@ -147,4 +180,5 @@ function ChessBoard() {
     };
 }
 
+// Exports
 module.exports = ChessBoard;

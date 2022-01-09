@@ -1,9 +1,12 @@
-const crypto = require('crypto');
+// Local imports
 const ChessBoard = require('./chessBoardServer');
+
+// Node imports
+const crypto = require('crypto');
+
 /**
  * This is the class for the chess match
  */
-
 function Match(socket1, socket2, statistics) {
     let capturedBlackPieces = [];
     let capturedWhitePieces = [];
@@ -15,16 +18,27 @@ function Match(socket1, socket2, statistics) {
     let numMatches = 0;
     let matchFinished = false;
 
+    /**
+     * Get a 60-byte random value
+     */
     function getRandom() {
         return crypto.randomBytes(60).toString('hex');
     }
 
+    /**
+     * Initialize the socket connected with a player
+     * @param {WebSocket} socket The socket of the player
+     * @param {number} playerNumber The number the player gets determining the playing color
+     */
     function initClient(socket, playerNumber) {
+        // Store player information on the socket object
         socket.gameData = {
             playerNumber,
             playerId: getRandom(),
             wantsRematch: false
         };
+
+        // Send the game setup command to the client
         socket.send(JSON.stringify({
             'command': 'enter_game',
             'player_number': playerNumber,
@@ -32,11 +46,18 @@ function Match(socket1, socket2, statistics) {
         }));
     }
 
+    /**
+     * Start countdown for the players
+     */
     let startTimer = () => {
         return setInterval(function() {
+            // Decrement remaining time for the player whose turn it is
             if(currentPlayer === 1 && whiteTimer > 0) whiteTimer--;
             else if (currentPlayer !== 1 && blackTimer > 0) blackTimer--;
+
+            // In case of a player running out of time
             if(whiteTimer === 0 || blackTimer === 0) {
+                // Determine the winner (player with time left) and notify the players of the match end
                 const winner = (blackTimer === 0) ? 1 : 2;
                 const winMessage = JSON.stringify({'command': 'game_end', 'winner_player': winner});
                 socket1.send(winMessage);
@@ -46,6 +67,9 @@ function Match(socket1, socket2, statistics) {
         }, 1000);
     };
 
+    /**
+     * Initialize a new game
+     */
     function initMatch() {
         statistics.incrementTotalGames();
         numMatches++;
@@ -69,47 +93,81 @@ function Match(socket1, socket2, statistics) {
         timerToken = startTimer();
     }
 
+    /**
+     * Handle an incoming message from a client socket
+     * @param {WebSocket} clientSocket The socket of the player who sent the message
+     * @param {WebSocket} opponentSocket The socket of the player's opponent
+     * @param {number} clientNumber The playerNumber of the sender
+     * @param {number} opponentNumber The playerNumber of the sender's opponent
+     * @param {Object} command The message send by the client socket
+     */
     function handleClientMessage(clientSocket, opponentSocket, clientNumber, opponentNumber, command) {
+        // Object containing a handler function for each command
         const messageHandler = {
             make_move: () => {
+                // If it's not the player's turn ignore the message
                 if(currentPlayer !== clientNumber) return;
-                // TODO: the internal board has one orientation with white on the bottom
-                // but the player with black has black on the bottom of the board
-                // so when black makes a move we need to mirror it horizontally
-                let temp = board.flipPositions(command.origin_row, command.origin_column, command.destination_row, command.destination_column);
-                let flippedCommand = {'command': 'make_move', 'player_id': undefined, 'origin_row': temp.origin_row, 
-                'origin_column': temp.origin_column, 'destination_row': temp.destination_row, 'destination_column': temp.destination_column};
-                if(currentPlayer === 1) {
-                    if(!board.checkMove({piece : board.getPiece(command.origin_row, command.origin_column), row: command.origin_row, 
-                        column: command.origin_column}, command.destination_row, command.destination_column)) return;
-                    let blackPiece = board.makeMove({piece : board.getPiece(command.origin_row, command.origin_column), 
-                        row: command.origin_row, column: command.origin_column}, command.destination_row, command.destination_column);
-                    if(blackPiece !== null) {
-                        capturedBlackPieces.push(blackPiece);
-                        statistics.incrementTotalPieces();
-                    }    
-                    if(capturedBlackPieces.length === 16) {
-                        clientSocket.send(JSON.stringify({'command': 'game_end', 'winner_player': 2}));
-                        opponentSocket.send(JSON.stringify({'command': 'game_end', 'winner_player': 2}));
-                    }
-                    console.log(capturedBlackPieces.length);
+
+                // Get command with the positions of the move in the perspective of the opponent
+                let flippedCommand = board.flipPositions(command.origin_row, command.origin_column, command.destination_row, command.destination_column);
+                flippedCommand.command = 'make_move';
+
+                // Determine moving piece, source position and destination position
+                let movingPiece;
+                let destRow;
+                let destCol;
+                let capturedArray;
+
+                if (currentPlayer == 1) {
+                    // Player is white use the sent position
+                    movingPiece = {
+                        piece : board.getPiece(command.origin_row, command.origin_column),
+                        row: command.origin_row, 
+                        column: command.origin_column
+                    };
+                    destRow = command.destination_row;
+                    destCol = command.destination_column;
+                    capturedArray = capturedBlackPieces;
                 } else {
-                    const movingPiece = {piece: board.getPiece(flippedCommand.origin_row, flippedCommand.origin_column), 
-                        row: flippedCommand.origin_row, column: flippedCommand.origin_column};
-                    if(!board.checkMove(movingPiece, flippedCommand['destination_row'], flippedCommand['destination_column'])) return;
-                    let whitePiece = board.makeMove(movingPiece, flippedCommand['destination_row'], flippedCommand['destination_column']);
-                    if(whitePiece !== null) {
-                        capturedWhitePieces.push(whitePiece);
-                        statistics.incrementTotalPieces();
-                    }    
-                    if(capturedWhitePieces.length === 16) {
-                        clientSocket.send(JSON.stringify({'command': 'game_end', 'winner_player': 1}));
-                        opponentSocket.send(JSON.stringify({'command': 'game_end', 'winner_player': 1}));
-                    }
-                    console.log(capturedWhitePieces.length);
+                    // Player is black use the flipped position, since the server's internal board has white at the bottom
+                    movingPiece = {
+                        piece: board.getPiece(flippedCommand.origin_row, flippedCommand.origin_column), 
+                        row: flippedCommand.origin_row,
+                        column: flippedCommand.origin_column
+                    };
+                    destRow = flippedCommand.destination_row;
+                    destRow = flippedCommand.destination_column;
+                    capturedArray = capturedWhitePieces;
                 }
+
+                // If client submitted invalid move, ignore the command
+                if (!board.checkMove(movingPiece, destRow, destCol)) return;
+
+                // Make the move
+                const capturedPiece = board.makeMove(movingPiece, destRow, destCol);
+
+                // Send the move to the opponent
                 opponentSocket.send(JSON.stringify(flippedCommand));
+
+                // Switch whose turn it is
                 currentPlayer = opponentNumber;  
+
+                // Handle if a piece was captured as the result of the move
+                if (capturedPiece !== null) {
+                    capturedArray.push(capturedPiece);
+                    statistics.incrementTotalPieces();
+
+                    // If all 16 pieces are captured by a player, the other player wins
+                    if (capturedArray.length === 16) {
+                        const gameEndMessage = JSON.stringify({
+                            'command': 'game_end',
+                            'winner_player': opponentPlayer
+                        });
+                        clientSocket.send(gameEndMessage);
+                        opponentSocket.send(gameEndMessage);
+                    }
+                    // TODO: set player number to 10 to disallow a 'hacked' move after the end of the game
+                }
             },
             offer_draw: () => {
                 opponentSocket.send(JSON.stringify({'command': 'offer_draw'}));
@@ -139,29 +197,54 @@ function Match(socket1, socket2, statistics) {
                 opponentSocket.send(JSON.stringify({'command': 'send_message', 'message': command.message}));
             }
         };
+
+        // Execute the corresponding command handler
         messageHandler[command.command]();
     }
 
+    /**
+     * Check if the message is valid and if it is forward it to the proper handler
+     * @param {WebSocket} socket The socket of the player who sent the message
+     * @param {String} data The message send by the socket 
+     */
     function screenMessage(socket, data) {
+        // Conver the message to an object
         const message = JSON.parse(data);
+
+        // If the secret player_id is missing, or invalid ignore the message
         if (message.player_id === undefined || message.player_id !== socket.gameData.playerId) return;
+
+        // Determine opponent socket and playerNumber
         const opponentSocket = (socket == socket1) ? socket2 : socket1;
         const opponentNumber = (socket.gameData.playerNumber == 1) ? 2 : 1;
+
+        // Pass the message to the handler
         handleClientMessage(socket, opponentSocket, socket.gameData.playerNumber, opponentNumber, message);
     }
 
+    /**
+     * Set the current match's state as ended, update current game stat
+     */
     function endGame() {
+        // Prevents ending the game more than once
         if(!matchFinished) {
             statistics.decrementCurrentGames();
             matchFinished = true;
         }    
     }
 
+    /**
+     * Handle a socket close
+     */
     function handleSocketClose(exitingSocket, otherSocket) {
+        // Notify opponent if socket is connected
         if (!matchFinished) otherSocket.send(JSON.stringify({command: 'opponent_left'}));
+
+        // Set game state to end
         endGame();
     }
 
+    // Register socket event for messaging and close
     socket1.on("message", function (message) {
         screenMessage(socket1, message);
     });
@@ -178,6 +261,9 @@ function Match(socket1, socket2, statistics) {
         handleSocketClose(socket2, socket1);
     });
 
+    // Initialize the first match of the lobby
     initMatch();
 }
+
+// Exports
 module.exports = Match;
