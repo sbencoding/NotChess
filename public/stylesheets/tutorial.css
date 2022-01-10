@@ -1,16 +1,17 @@
 @font-face {
-    font-family: "Clarendon-Bold";
-    src: url("../fonts/Clarendon-Bold.ttf") format("truetype");
+    font-family: "Clarendon-Regular";
+    src: url("../fonts/Clarendon-Regular.otf");
 }
 
 header {
     display: flex;
     flex-direction: row;
-    font-family: "Clarendon-Bold";
+    font-family: "Clarendon-Regular";
 }
 
 #middle {
     display: flex;
+    font-family: "Clarendon-Regular";
 }
 
 ul {
