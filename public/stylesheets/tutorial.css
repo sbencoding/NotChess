@@ -18,6 +18,7 @@ header {
     display: flex;
     flex-direction: row;
     font-family: "Clarendon-Regular";
+    font-size: larger;
 }
 
 a {
@@ -27,17 +28,22 @@ a {
 #left {
     flex: 1;
     display: flex;
+    font-family: "Clarendon-Regular";
+    font-size: large;
 }
 
 #middle {
     flex: 1;
     font-family: "Clarendon-Regular";
+    font-size: large;
     display: flex;
 }
 
 #right {
     flex: 1;
     display: flex;
+    font-family: "Clarendon-Regular";
+    font-size: large;
 }
 
 button {
@@ -45,7 +51,8 @@ button {
     background-color: #FFA710;
     border: none;
     padding: 20px 50px 20px 50px;
-    font-family: "Clarendon-Bold";
+    font-size: large;
+    font-family: "Clarendon-Regular";
 }
 
 article > div {

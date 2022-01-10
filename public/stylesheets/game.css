@@ -1,6 +1,6 @@
 @font-face {
-    font-family: "Clarendon-Bold";
-    src: url("../fonts/Clarendon-Bold.ttf") format("truetype");
+    font-family: "Clarendon-Regular";
+    src: url("../fonts/Clarendon-Regular.otf") format("truetype");
 }
 
 #logo {
@@ -9,7 +9,7 @@
 
 #app_name {
     padding-top: 8px;
-    font-family: "Clarendon-Bold";
+    font-family: "Clarendon-Regular";
 }
 
 body {
@@ -30,6 +30,7 @@ footer {
 header {
     display: flex;
     flex-direction: row;
+    font-size: larger;
 }
 
 button {
@@ -37,7 +38,8 @@ button {
     background-color: #FFA710;
     border: none;
     padding: 20px 50px 20px 50px;
-    font-family: "Clarendon-Bold";
+    font-family: "Clarendon-Regular";
+    /* font-size: large; */
 }
 
 #supportButton {
@@ -53,19 +55,19 @@ button {
     position: absolute;
     right: 0;
     margin-right: 5px;
-    font-family: "Clarendon-Bold";
+    font-family: "Clarendon-Regular";
 }
 
 .my_message {
     align-self: flex-start;
     padding: 5px;
-    font-family: "Clarendon-Bold";
+    font-family: "Clarendon-Regular";
 }
 
 .enemy_message {
     align-self: flex-end;
     padding: 5px;
-    font-family: "Clarendon-Bold";
+    font-family: "Clarendon-Regular";
 }
 
 article {
@@ -98,15 +100,15 @@ article > section {
 #my_timer {
     position: absolute;
     bottom: 0;
-    font-family: "Clarendon-Bold";
+    font-family: "Clarendon-Regular";
 }
 
 #enemy_timer {
-    font-family: "Clarendon-Bold";
+    font-family: "Clarendon-Regular";
 }
 
 #status_message {
-    font-family: "Clarendon-Bold";
+    font-family: "Clarendon-Regular";
 }
 
 #chat_window {
