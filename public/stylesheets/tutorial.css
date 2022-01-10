@@ -1,0 +1,27 @@
+@font-face {
+    font-family: "Clarendon-Bold";
+    src: url("../fonts/Clarendon-Bold.ttf") format("truetype");
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+    font-family: "Clarendon-Bold";
+}
+
+#middle {
+    /*text-align: center;*/
+}
+
+ul {
+    list-style-type: square;
+    /*text-align: center;*/
+}
+
+#logo {
+    transform: scaleY(-1);
+}
+
+body {
+    background-color: #0083FF 
+}
