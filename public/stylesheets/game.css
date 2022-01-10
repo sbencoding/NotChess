@@ -42,6 +42,15 @@ button {
     /* font-size: large; */
 }
 
+#yesButton, #noButton {
+    width: 130px;
+    height: 30px;
+    background-color: #FFA710;
+    border: none;
+    padding: 10px 50px 10px 50px;
+    font-family: "Clarendon-Regular";
+}
+
 #supportButton {
     margin-left: auto;
 }
