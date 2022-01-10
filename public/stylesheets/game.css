@@ -1,9 +1,15 @@
+@font-face {
+    font-family: "Clarendon-Bold";
+    src: url("../fonts/Clarendon-Bold.ttf") format("truetype");
+}
+
 #logo {
     transform: scaleY(-1);
 }
 
 #app_name {
     padding-top: 8px;
+    font-family: "Clarendon-Bold";
 }
 
 body {
@@ -18,6 +24,7 @@ footer {
     left: 0;
     right: 0;
     padding: 10px;
+    border-top: 1px solid black;
 }
 
 header {
@@ -46,16 +53,19 @@ button {
     position: absolute;
     right: 0;
     margin-right: 5px;
+    font-family: "Clarendon-Bold";
 }
 
 .my_message {
     align-self: flex-start;
     padding: 5px;
+    font-family: "Clarendon-Bold";
 }
 
 .enemy_message {
     align-self: flex-end;
     padding: 5px;
+    font-family: "Clarendon-Bold";
 }
 
 article {
@@ -88,6 +98,15 @@ article > section {
 #my_timer {
     position: absolute;
     bottom: 0;
+    font-family: "Clarendon-Bold";
+}
+
+#enemy_timer {
+    font-family: "Clarendon-Bold";
+}
+
+#status_message {
+    font-family: "Clarendon-Bold";
 }
 
 #chat_window {
