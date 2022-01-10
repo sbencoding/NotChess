@@ -16,6 +16,7 @@ function setStatistics(value) {
  * Pair the players currently waiting in the queue (if possible)
  */
 function matchMake() {
+    // TODO: remove players exiting from the queue
     while (playerQueue.length >= 2) {
         // Remove and get the first two players in the queue
         const player1 = playerQueue.shift();
