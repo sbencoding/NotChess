@@ -3,21 +3,58 @@
     src: url("../fonts/Clarendon-Regular.otf");
 }
 
+main {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 5px;
+    right: 0;
+}
+
 header {
     display: flex;
     flex-direction: row;
     font-family: "Clarendon-Regular";
 }
 
-#middle {
+a {
+    z-index: 1000;
+}
+
+#left {
+    flex: 1;
     display: flex;
+}
+
+#middle {
+    flex: 1;
     font-family: "Clarendon-Regular";
+    display: flex;
+}
+
+#right {
+    flex: 1;
+    display: flex;
+}
+
+button {
+    width: 300px;
+    background-color: #FFA710;
+    border: none;
+    padding: 20px 50px 20px 50px;
+    font-family: "Clarendon-Bold";
+}
+
+article > div {
+    margin-left: auto;
+    margin-right: auto;
 }
 
 ul {
     list-style-type: square;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 #logo {
@@ -25,9 +62,11 @@ ul {
 }
 
 body {
-    background-color: #0083FF 
+    background-color: #0083FF;
 }
 
-#rule_list_prefix {
-    text-align: center;
+article > p {
+    margin-left: auto;
+    margin-right: auto;
 }
+
