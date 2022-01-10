@@ -27,3 +27,7 @@ ul {
 body {
     background-color: #0083FF 
 }
+
+#rule_list_prefix {
+    text-align: center;
+}
