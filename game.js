@@ -22,6 +22,10 @@ function matchMake() {
         const player1 = playerQueue.shift();
         const player2 = playerQueue.shift();
 
+        // Remove premature socket close handler
+        player1.removeAllListeners('close');
+        player2.removeAllListeners('close');
+
         // Add the players to a new match
         Match(player1, player2, statistics);
 
@@ -30,12 +34,25 @@ function matchMake() {
     }
 }
 
+
 /**
  * Add a new socket to the game server
  * @param {WebSocket} socket The socket the server accepted the connection from
  */
 function addClient(socket) {
     console.log('new client');
+
+    /**
+     * Handle if a queued socket closes before entering a match
+     */
+    const handleQueuedSocketClose = () => {
+        const idx = playerQueue.indexOf(socket);
+        if (idx === -1) return;
+        playerQueue.splice(idx, 1);
+    };
+
+    socket.on('close', handleQueuedSocketClose);
+
     // Add the new player to the queue
     playerQueue.push(socket);
 
