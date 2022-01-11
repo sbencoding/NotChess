@@ -136,7 +136,7 @@ function Match(socket1, socket2, statistics) {
                         column: flippedCommand.origin_column
                     };
                     destRow = flippedCommand.destination_row;
-                    destRow = flippedCommand.destination_column;
+                    destCol = flippedCommand.destination_column;
                     capturedArray = capturedWhitePieces;
                 }
 
