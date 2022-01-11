@@ -164,7 +164,7 @@ function Match(socket1, socket2, statistics) {
                         roundFinished = true;
                         const gameEndMessage = JSON.stringify({
                             'command': 'game_end',
-                            'winner_player': opponentPlayer
+                            'winner_player': opponentNumber
                         });
                         clientSocket.send(gameEndMessage);
                         opponentSocket.send(gameEndMessage);
