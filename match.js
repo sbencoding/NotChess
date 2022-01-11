@@ -17,6 +17,7 @@ function Match(socket1, socket2, statistics) {
     let timerToken;
     let numMatches = 0;
     let matchFinished = false;
+    let roundFinished = false;
 
     /**
      * Get a 60-byte random value
@@ -57,6 +58,7 @@ function Match(socket1, socket2, statistics) {
 
             // In case of a player running out of time
             if(whiteTimer === 0 || blackTimer === 0) {
+                roundFinished = true;
                 // Determine the winner (player with time left) and notify the players of the match end
                 const winner = (blackTimer === 0) ? 1 : 2;
                 const winMessage = JSON.stringify({'command': 'game_end', 'winner_player': winner});
@@ -71,6 +73,8 @@ function Match(socket1, socket2, statistics) {
      * Initialize a new game
      */
     function initMatch() {
+        roundFinished = false;
+
         statistics.incrementTotalGames();
         numMatches++;
         let player1Color = ((numMatches % 2) === 1) ? 1 : 2;
@@ -103,8 +107,8 @@ function Match(socket1, socket2, statistics) {
         // Object containing a handler function for each command
         const messageHandler = {
             make_move: () => {
-                // If it's not the player's turn ignore the message
-                if(currentPlayer !== clientNumber) return;
+                // If it's not the player's turn ignore the message OR the round is finished (not the whole match, they can still rematch)
+                if(currentPlayer !== clientNumber || roundFinished) return;
 
                 // Get command with the positions of the move in the perspective of the opponent
                 let flippedCommand = board.flipPositions(command.origin_row, command.origin_column, command.destination_row, command.destination_column);
@@ -157,6 +161,7 @@ function Match(socket1, socket2, statistics) {
 
                     // If all 16 pieces are captured by a player, the other player wins
                     if (capturedArray.length === 16) {
+                        roundFinished = true;
                         const gameEndMessage = JSON.stringify({
                             'command': 'game_end',
                             'winner_player': opponentPlayer
@@ -164,7 +169,6 @@ function Match(socket1, socket2, statistics) {
                         clientSocket.send(gameEndMessage);
                         opponentSocket.send(gameEndMessage);
                     }
-                    // TODO: set player number to 10 to disallow a 'hacked' move after the end of the game
                 }
             },
             offer_draw: () => {
@@ -172,15 +176,18 @@ function Match(socket1, socket2, statistics) {
             },
             accept_draw: () => {
                 opponentSocket.send(JSON.stringify({'command': 'accept_draw'}));
+                roundFinished = true;
             },
             reject_draw: () => {
                 opponentSocket.send(JSON.stringify({'command': 'reject_draw'}));
             },
             resign: () => {
                 opponentSocket.send(JSON.stringify({'command': 'resign'}));
+                roundFinished = true;
             },
             accept_rematch: () => {
-                // TODO: block this command unless the game has ended really
+                // If the round is still on going, then don't accept this command
+                if (!roundFinished) return;
                 opponentSocket.send(JSON.stringify({'command': 'accept_rematch'}));
                 clientSocket.gameData.wantsRematch = true;
                 if (clientSocket.gameData.wantsRematch && opponentSocket.gameData.wantsRematch) {
