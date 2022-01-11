@@ -79,7 +79,6 @@ function GameState(board, socket, playerNum, personalColor) {
         const ui = document.querySelector(selector);
         const img = document.createElement('img');
         img.src = chessPiece.url;
-        // TODO: what's a good size? this way all pieces (16) fit in a single row
         img.width = 30;
         img.height = 30;
         ui.appendChild(img);

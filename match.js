@@ -79,12 +79,10 @@ function Match(socket1, socket2, statistics) {
         capturedBlackPieces = [];
         capturedWhitePieces = [];
 
-        // TODO: increment the number of started matches
         board = ChessBoard();
         currentPlayer = 1;
         board.initBoard();
 
-        // TODO: maybe change player number so that color also changes
         initClient(socket1, player1Color);
         initClient(socket2, player2Color);
 
