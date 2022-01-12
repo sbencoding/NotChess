@@ -17,8 +17,8 @@ router.get("/", function(req, res) {
 });
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.sendFile('splash.html', {root: './public'});
+router.get('/tutorial', function(req, res, next) {
+  res.sendFile('tutorial.html', {root: './public'});
 });
 
 module.exports = {router, setStatistics};

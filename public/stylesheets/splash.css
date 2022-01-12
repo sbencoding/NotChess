@@ -74,6 +74,10 @@ button:hover {
     transform: scale(1.1);
 }
 
+button:active {
+    background-color: #ad8107;
+}
+
 body {
     background-color: #0083FF 
 }

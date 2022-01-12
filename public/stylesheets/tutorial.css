@@ -25,6 +25,11 @@ a {
     z-index: 1000;
 }
 
+#right p::after {
+    content: "BAD LUCK!";
+    font-weight: bold;
+}
+
 #left {
     flex: 1;
     display: flex;
@@ -58,6 +63,10 @@ button {
 
 button:hover {
     transform: scale(1.1);
+}
+
+button:active {
+    background-color: #ad8107;
 }
 
 article > div {

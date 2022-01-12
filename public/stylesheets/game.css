@@ -46,6 +46,10 @@ button:hover {
     transform: scale(1.1);
 }
 
+button:active {
+    background-color: #ad8107;
+}
+
 #yesButton, #noButton {
     width: 130px;
     height: 30px;
