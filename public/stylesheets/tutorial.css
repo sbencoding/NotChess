@@ -69,6 +69,10 @@ button:active {
     background-color: #ad8107;
 }
 
+button::before {
+    content: "❮ ";
+}
+
 article > div {
     margin-left: auto;
     margin-right: auto;
