@@ -177,6 +177,18 @@ function ChessBoard() {
                 'destination_column': 7 - destinationColumn,
             };
         },
+        isStalemate: (playerNumber) => {
+            let playerColor = (playerNumber == 1) ? 'white' : 'black';
+            for(let i = 0; i < 8; i++) {
+                for(let j = 0; j < 8; j++) {
+                    if (cells[i][j] == null || cells[i][j].color !== playerColor) continue;
+                    let moves = Validator.getValidMoves(cells, i, j, playerNumber != 1);
+                    if(moves.positions.length != 0 ||
+                    moves.enemies.length != 0) return false; 
+                }
+            }
+            return true;
+        }
     };
 }
 

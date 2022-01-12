@@ -61,7 +61,7 @@ function Match(socket1, socket2, statistics) {
                 roundFinished = true;
                 // Determine the winner (player with time left) and notify the players of the match end
                 const winner = (blackTimer === 0) ? 1 : 2;
-                const winMessage = JSON.stringify({'command': 'game_end', 'winner_player': winner});
+                const winMessage = JSON.stringify({'command': 'game_end', 'winner_player': winner, 'reason': 'timeout'});
                 socket1.send(winMessage);
                 socket2.send(winMessage);
                 clearInterval(timerToken);
@@ -164,12 +164,33 @@ function Match(socket1, socket2, statistics) {
                         roundFinished = true;
                         const gameEndMessage = JSON.stringify({
                             'command': 'game_end',
-                            'winner_player': opponentNumber
+                            'winner_player': opponentNumber,
+                            'reason': 'pieces'
                         });
                         clientSocket.send(gameEndMessage);
                         opponentSocket.send(gameEndMessage);
+                        return;
                     }
                 }
+
+                //If opponent is stalemated, send the gameEndMessage
+                let isClientStalemate = board.isStalemate(clientNumber);
+                let isOpponentStalemate = board.isStalemate(opponentNumber);
+                if (isClientStalemate || isOpponentStalemate) {
+                    let winner;
+                    if(isClientStalemate && !isOpponentStalemate) {
+                        winner = clientNumber;
+                    } else if (isOpponentStalemate && !isClientStalemate) winner = opponentNumber;
+                    else winner = 0;
+                    const gameEndMessage = JSON.stringify({
+                        'command': 'game_end',
+                        'winner_player': winner,
+                        'reason': 'stalemate'
+                    });
+                    clientSocket.send(gameEndMessage);
+                    opponentSocket.send(gameEndMessage);
+                    return;
+                } 
             },
             offer_draw: () => {
                 opponentSocket.send(JSON.stringify({'command': 'offer_draw'}));
