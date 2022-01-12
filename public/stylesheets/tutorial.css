@@ -53,6 +53,11 @@ button {
     padding: 20px 50px 20px 50px;
     font-size: large;
     font-family: "Clarendon-Regular";
+    cursor: pointer;
+}
+
+button:hover {
+    transform: scale(1.1);
 }
 
 article > div {

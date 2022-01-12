@@ -39,7 +39,11 @@ button {
     border: none;
     padding: 20px 50px 20px 50px;
     font-family: "Clarendon-Regular";
-    /* font-size: large; */
+    cursor: pointer;
+}
+
+button:hover {
+    transform: scale(1.1);
 }
 
 #yesButton, #noButton {
