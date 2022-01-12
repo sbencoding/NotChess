@@ -71,12 +71,16 @@ button {
     align-self: flex-start;
     padding: 5px;
     font-family: "Clarendon-Regular";
+    width: 150px;
+    word-wrap: break-word;
 }
 
 .enemy_message {
     align-self: flex-end;
     padding: 5px;
     font-family: "Clarendon-Regular";
+    width: 150px;
+    word-wrap: break-word;
 }
 
 article {
