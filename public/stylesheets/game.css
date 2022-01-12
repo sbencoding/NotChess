@@ -75,6 +75,10 @@ button:active {
     font-family: "Clarendon-Regular";
 }
 
+#logo:hover {
+    transform: scale(1.1);
+}
+
 .my_message {
     align-self: flex-start;
     padding: 5px;
