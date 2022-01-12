@@ -78,6 +78,19 @@ button:active {
     background-color: #ad8107;
 }
 
+button::before {
+    content: "> ";
+}
+
+#support:hover {
+    transform: scale(1.1);
+    background-color: #FFD700;
+}
+
+#support:active {
+    background-color: #FFD700;
+}
+
 body {
     background-color: #0083FF 
 }
