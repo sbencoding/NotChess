@@ -78,6 +78,10 @@ button:active {
     background-color: #ad8107;
 }
 
+button::before {
+    content: " >";
+}
+
 body {
     background-color: #0083FF 
 }
