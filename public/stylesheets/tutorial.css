@@ -4,8 +4,8 @@
 }
 
 main {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: auto auto auto;
     align-items: center;
     position: absolute;
     top: 0;
@@ -31,21 +31,18 @@ a {
 }
 
 #left {
-    flex: 1;
     display: flex;
     font-family: "Clarendon-Regular";
     font-size: large;
 }
 
 #middle {
-    flex: 1;
     font-family: "Clarendon-Regular";
     font-size: large;
     display: flex;
 }
 
 #right {
-    flex: 1;
     display: flex;
     font-family: "Clarendon-Regular";
     font-size: large;
