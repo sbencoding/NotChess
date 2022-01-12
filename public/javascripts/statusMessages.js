@@ -19,6 +19,11 @@ const Status = {
     waitingPlayer: "There are currently no players, waiting for an oponent... ",
     acceptedRematch: "Do you want to play a rematch? \n Your enemy accepted the rematch! ",
     gameResigned: "You have resigned the game ",
-    opponentLeft: "Your opponent has left the match, you can look for another game"
+    opponentLeft: "Your opponent has left the match, you can look for another game",
+    wonTimeout: "You won the match due to timeout! ",
+    lostTimeout: "You lost the match due to timeout! ",
+    wonStalemate: "You won the match due to stalemate! ",
+    lostStalemate: "You lost the match due to stalemate! ",
+    drawStalemate: "The game was a draw due to stalemate! "
 };
 

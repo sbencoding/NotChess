@@ -226,8 +226,20 @@ function GameState(board, socket, playerNum, personalColor) {
             if (friendlyPiece !== null) updFriendlyPieces(friendlyPiece);
             currentPlayer = playerNumber;
         } else if (message.command === 'game_end') {
-            if(message.winner_player === playerNumber) displayMessage('gameWon');
-            else displayMessage('gameLost');
+            if(message.winner_player === playerNumber) {
+                if(message.reason === "pieces") displayMessage('gameWon');
+                if(message.reason === "timeout") displayMessage('wonTimeout');
+                if(message.reason === "stalemate") displayMessage('wonStalemate');
+            }    
+            else if (message.winner_player === 0) {
+                if(message.reason !== "stalemate") displayMessage('gameDraw');
+                else displayMessage('drawStalemate');
+            }    
+            else {
+                if(message.reason === "pieces") displayMessage('gameLost');
+                if(message.reason === "timeout") displayMessage('lostTimeout');
+                if(message.reason === "stalemate") displayMessage('lostStalemate');
+            }    
             playerNumber = 10;
             setTimeout(() => {displayMessage('gameRematch')}, 2000);
             clearInterval(timerToken);
