@@ -25,11 +25,6 @@ a {
     z-index: 1000;
 }
 
-#right p::after {
-    content: "BAD LUCK!";
-    font-weight: bold;
-}
-
 #left {
     display: flex;
     font-family: "Clarendon-Regular";

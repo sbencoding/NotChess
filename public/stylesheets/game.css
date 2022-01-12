@@ -158,14 +158,41 @@ article > section {
     margin-right: auto;
 }
 
-td {
-    width: 64px;
-    height: 64px;
-    padding: 0;
+@media screen and (min-width: 1366px) and (min-height: 768px) {
+    tr {
+        height: 64px;
+    }
+
+    td {
+        width: 64px;
+        height: 64px;
+        padding: 0;
+    }
+
+    #too_small_msg, #too_small_container {
+        display: none;
+    }
 }
 
-tr {
-    height: 64px;
+@media (max-width: 1365px), (max-height: 767px) {
+    body {
+        background-color: red;
+    }
+
+    #too_small_container {
+        display: flex;
+        justify-content: center;
+    }
+
+    #too_small_msg {
+        display: block;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    body * {
+        display: none;
+    }
 }
 
 table: {

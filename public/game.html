@@ -7,6 +7,9 @@
     </head>
 
     <body>
+        <div id="too_small_container">
+            <p id="too_small_msg">Your screen is too smol (buy a better laptop MAN!)</p>
+        </div>
         <header>
             <a href="/"><img id="logo" src="images/logo.svg" width=64 height=64 /></a>
             <p id="app_name">NotChess</p>
@@ -149,12 +152,17 @@
             <aside id="actions">
                 <button id="resignButton">Resign</button>
                 <button id="drawButton">Offer draw</button>
+                <p name="status_message"></p>
+                <div name="message_buttons" class="hidden">
+                    <button name="yesButton">Yes</button>
+                    <button name="noButton">No</button>
+                </div>
             </aside>
             </article>
-            <p id="status_message"></p>
-            <div id="message_buttons" class="hidden">
-                <button id="yesButton">Yes</button>
-                <button id="noButton">No</button>
+            <p id="status_message" name="status_message"></p>
+            <div id="message_buttons" name="message_buttons" class="hidden">
+                <button id="yesButton" name="yesButton">Yes</button>
+                <button id="noButton" name="noButton">No</button>
             </div>
         </article>
         <footer>
