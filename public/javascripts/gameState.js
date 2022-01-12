@@ -44,10 +44,10 @@ function GameState(board, socket, playerNum, personalColor) {
         window.location.pathname = '/';
     };
 
-    let displayMessage = function (/** @type {string} */ statusCode) {
+    let updateMessageArea = (statusCode, parent) => {
         let message = Status[statusCode];
-        document.querySelector("#status_message").textContent = message;
-        let buttons = document.querySelector("#message_buttons");
+        parent.querySelector("[name=status_message]").textContent = message;
+        let buttons = parent.querySelector("[name=message_buttons]");
 
         if(statusCode === "drawPrompt" || statusCode === "gameRematch" || statusCode === "acceptedRematch") {
             buttons.classList.remove("hidden");
@@ -56,15 +56,19 @@ function GameState(board, socket, playerNum, personalColor) {
         }
 
         if(statusCode === "drawPrompt") {
-            let buttons = document.querySelector("#message_buttons");
             buttons.querySelector("#yesButton").onclick = () => acceptDraw(displayMessage);
             buttons.querySelector("#noButton").onclick = () => rejectDraw(displayMessage);
-        }
-        else if (statusCode === "gameRematch") {
-            let buttons = document.querySelector("#message_buttons");
+        } else if (statusCode === "gameRematch") {
             buttons.querySelector("#yesButton").onclick = () => acceptRematch(displayMessage);
             buttons.querySelector("#noButton").onclick = rejectRematch;
         }
+    };
+
+    let displayMessage = function (/** @type {string} */ statusCode) {
+        const announcementsSide = document.querySelector('#announcements_side');
+        const announcementsBottom = document.querySelector('#announcements_bottom');
+        updateMessageArea(statusCode, announcementsSide);
+        updateMessageArea(statusCode, announcementsBottom);
     };
 
     displayMessage('waitingPlayer');
@@ -111,7 +115,9 @@ function GameState(board, socket, playerNum, personalColor) {
     };
 
     let playerMove = function (row, column) {
-        document.querySelector("#status_message").textContent = "";
+        //document.querySelector("#status_message").textContent = "";
+        // TODO: handle properly
+        displayMessage("");
         if(currentPlayer !== playerNumber) return;
         if(pieceSelected === undefined) {
             if (!board.hasPiece(row, column)) return;

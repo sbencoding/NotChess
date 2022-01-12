@@ -50,7 +50,7 @@ button:active {
     background-color: #ad8107;
 }
 
-#yesButton, #noButton {
+[name=yesButton], [name=noButton] {
     width: 130px;
     height: 30px;
     background-color: #FFA710;
@@ -128,7 +128,7 @@ article > section {
     font-family: "Clarendon-Regular";
 }
 
-#status_message {
+[name=status_message ]{
     font-family: "Clarendon-Regular";
 }
 
@@ -170,6 +170,24 @@ article > section {
     }
 
     #too_small_msg, #too_small_container {
+        display: none;
+    }
+}
+
+
+#announcements_bottom {
+    display: none;
+}
+
+#announcements_side {
+    display: block;
+}
+
+@media screen and (min-height: 860px) {
+    #announcements_bottom {
+        display: block;
+    }
+    #announcements_side {
         display: none;
     }
 }
