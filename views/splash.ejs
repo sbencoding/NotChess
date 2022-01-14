@@ -44,10 +44,10 @@
             </footer>
         </main>
         <script>
-            const buttonSound = new Audio("audio/button_click_sound.mp3");
+            const buttonSound = new Audio("../audio/button_click_sound.mp3");
             let buttons = document.querySelectorAll("button");
             for(let b of buttons) {
-                b.onclick = () => buttonSound.play();
+                b.addEventListener('click', (e) => {buttonSound.play()});
             }
         </script>
     </body>
