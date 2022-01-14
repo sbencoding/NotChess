@@ -21,6 +21,7 @@ app.use(express.static(__dirname + "/public"));
 app.get("/", indexRouter.router);
 app.get("/play", indexRouter.router);
 app.get("/tutorial", indexRouter.router);
+app.get("/support", indexRouter.router);
 
 // Setup websocket server
 const server = http.createServer(app)
