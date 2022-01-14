@@ -34,5 +34,12 @@
                 </div> 
             </article>
         </main> 
+        <script>
+            const buttonSound = new Audio("audio/button_click_sound.mp3");
+            let buttons = document.querySelectorAll("button");
+            for(let b of buttons) {
+                b.onclick = () => buttonSound.play();
+            }
+        </script>
     </body>
 </html>    
