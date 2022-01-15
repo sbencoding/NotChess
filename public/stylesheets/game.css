@@ -81,7 +81,7 @@ button:active {
 }
 
 .my_message {
-    align-self: flex-start;
+    align-self: flex-end;
     padding: 5px;
     font-family: "Clarendon-Regular";
     width: 150px;
@@ -89,7 +89,7 @@ button:active {
 }
 
 .enemy_message {
-    align-self: flex-end;
+    align-self: flex-start;
     padding: 5px;
     font-family: "Clarendon-Regular";
     width: 150px;
