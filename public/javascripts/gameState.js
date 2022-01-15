@@ -44,6 +44,26 @@ function GameState(board, socket, playerNum, personalColor) {
         window.location.pathname = '/';
     };
 
+    let disableResign = () => {
+        const btn = document.querySelector('#resignButton');
+        btn.setAttribute('disabled', true);
+    };
+
+    let enableResign = () => {
+        const btn = document.querySelector('#resignButton');
+        btn.removeAttribute('disabled');
+    };
+
+    let disableDraw = () => {
+        const btn = document.querySelector('#drawButton');
+        btn.setAttribute('disabled', true);
+    };
+
+    let enableDraw = () => {
+        const btn = document.querySelector('#drawButton');
+        btn.removeAttribute('disabled');
+    };
+
     let updateMessageArea = (statusCode, parent) => {
         let message = Status[statusCode];
         parent.querySelector("[name=status_message]").textContent = message;
