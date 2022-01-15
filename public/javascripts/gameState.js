@@ -1,7 +1,5 @@
 //@ts-check
 
-const { disable } = require("express/lib/application");
-
 function GameState(board, socket, playerNum, personalColor) {
     let personalTimer = 600;
     let enemyTimer = 600;
@@ -15,6 +13,26 @@ function GameState(board, socket, playerNum, personalColor) {
     let playerNumber = playerNum;
     let rematchAccepted = false;
     let timerToken;
+
+    let disableResign = () => {
+        const btn = document.querySelector('#resignButton');
+        btn.setAttribute('disabled', true);
+    };
+
+    let enableResign = () => {
+        const btn = document.querySelector('#resignButton');
+        btn.removeAttribute('disabled');
+    };
+
+    let disableDraw = () => {
+        const btn = document.querySelector('#drawButton');
+        btn.setAttribute('disabled', true);
+    };
+
+    let enableDraw = () => {
+        const btn = document.querySelector('#drawButton');
+        btn.removeAttribute('disabled');
+    };
 
     disableResign();
     disableDraw();
@@ -50,25 +68,6 @@ function GameState(board, socket, playerNum, personalColor) {
         window.location.pathname = '/';
     };
 
-    let disableResign = () => {
-        const btn = document.querySelector('#resignButton');
-        btn.setAttribute('disabled', true);
-    };
-
-    let enableResign = () => {
-        const btn = document.querySelector('#resignButton');
-        btn.removeAttribute('disabled');
-    };
-
-    let disableDraw = () => {
-        const btn = document.querySelector('#drawButton');
-        btn.setAttribute('disabled', true);
-    };
-
-    let enableDraw = () => {
-        const btn = document.querySelector('#drawButton');
-        btn.removeAttribute('disabled');
-    };
 
     let updateMessageArea = (statusCode, parent) => {
         let message = Status[statusCode];
