@@ -21,4 +21,8 @@ router.get('/tutorial', function(req, res, next) {
   res.sendFile('tutorial.html', {root: './public'});
 });
 
+router.get('/support', function(req, res, next) {
+  res.sendFile('support.html', {root: './public'});
+});
+
 module.exports = {router, setStatistics};
