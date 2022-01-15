@@ -1,5 +1,7 @@
 //@ts-check
 
+const { disable } = require("express/lib/application");
+
 function GameState(board, socket, playerNum, personalColor) {
     let personalTimer = 600;
     let enemyTimer = 600;
@@ -14,12 +16,16 @@ function GameState(board, socket, playerNum, personalColor) {
     let rematchAccepted = false;
     let timerToken;
 
+    disableResign();
+    disableDraw();
+
     let socketSend = (messageObject) => {
         messageObject.player_id = playerID;
         socket.send(JSON.stringify(messageObject));
     };
 
     let acceptDraw = (showMessage) => {
+        disableDraw();
         socketSend({'command': 'accept_draw'});
         clearInterval(timerToken);
         showMessage('gameDraw');
@@ -218,6 +224,8 @@ function GameState(board, socket, playerNum, personalColor) {
     };
 
     let resetGameState = function () {
+        enableResign();
+        enableDraw();
         board.initBoard(personalColor, playerMove);
         capturedFriendlyPieces = [];
         capturedEnemyPieces = [];
@@ -235,6 +243,8 @@ function GameState(board, socket, playerNum, personalColor) {
         console.log(event.data);
         const message = JSON.parse(event.data);
         if (message.command === 'enter_game') {
+            enableDraw();
+            enableResign();
             console.log('starting game');
             displayMessage(`player${message.player_number}`);
             playerNum = message.player_number;
@@ -252,6 +262,8 @@ function GameState(board, socket, playerNum, personalColor) {
             if (friendlyPiece !== null) updFriendlyPieces(friendlyPiece);
             currentPlayer = playerNumber;
         } else if (message.command === 'game_end') {
+            disableDraw();
+            disableResign();
             if(message.winner_player === playerNumber) {
                 if(message.reason === "pieces") displayMessage('gameWon');
                 if(message.reason === "timeout") displayMessage('wonTimeout');
@@ -270,16 +282,23 @@ function GameState(board, socket, playerNum, personalColor) {
             setTimeout(() => {displayMessage('gameRematch')}, 2000);
             clearInterval(timerToken);
         } else if (message.command === 'offer_draw') {
+            disableDraw();
             displayMessage('drawPrompt');
         } else if (message.command === 'accept_draw') {
+            disableResign();
+            disableDraw();
             displayMessage('gameDraw');
             setTimeout(() => {displayMessage('gameRematch')}, 2000);
             clearInterval(timerToken);
         } else if (message.command === 'reject_draw') {
             displayMessage('drawDenied');
+            enableDraw();
+            enableResgin();
             setTimeout(() => {displayMessage(`player${playerNumber}`)}, 2000);
         } else if (message.command === 'resign') {
             displayMessage('enemyResigned');
+            disableResign();
+            disableDraw();
             playerNumber = 10;
             setTimeout(() => {displayMessage('gameRematch')}, 2000);
             clearInterval(timerToken);
@@ -291,6 +310,8 @@ function GameState(board, socket, playerNum, personalColor) {
             chatMessages.push(ChatMessage(playerNumber === 1 ? 2 : 1, new Date(), message.message));
             updateChatWindow(chatMessages[chatMessages.length - 1]);
         } else if (message.command === 'opponent_left') {
+            disableResign();
+            disableDraw();
             displayMessage('opponentLeft');
             playerNumber = 10;
             clearInterval(timerToken);
@@ -303,12 +324,14 @@ function GameState(board, socket, playerNum, personalColor) {
 
     let resign = () => {
         displayMessage('gameResigned');
+        disableResign();
         socketSend({'command': 'resign'});
         setTimeout(() => {displayMessage('gameRematch')}, 2000);
         clearInterval(timerToken);
     };
 
     let offerDraw = () => {
+        disableDraw();
         socketSend({'command': 'offer_draw'});
     };
 
