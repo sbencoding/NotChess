@@ -1,7 +1,12 @@
 # Game Assignment
 
+
+## Task 4.1
+
 **Chosen game**: Antichess
 
+
+## Task 4.2 & 4.3
 Some online examples:
 * [GreenChess](greenchess.net/rules.php?v=suicide)
     - It doesn't have a clear button to play the game, neither a tutorial, only an explanation of the rules.

@@ -60,7 +60,6 @@ function GameState(board, socket, playerNum, personalColor) {
     };
 
     let acceptRematch = (showMessage) => {
-        enableDraw();
         socketSend({'command': 'accept_rematch'});
         showMessage('waitingRematch');
     };
