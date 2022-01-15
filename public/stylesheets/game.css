@@ -82,6 +82,7 @@ button:active {
 
 .my_message {
     align-self: flex-end;
+    text-align: right;
     padding: 5px;
     font-family: "Clarendon-Regular";
     width: 150px;
