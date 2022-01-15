@@ -180,12 +180,6 @@
         <script src="javascripts/chessBoard.js"></script>
         <script src="javascripts/gameState.js"></script>
         <script src="javascripts/main.js"></script>
-        <script>
-            const buttonSound = new Audio("audio/button_click_sound.mp3");
-            let buttons = document.querySelectorAll("button");
-            for(let b of buttons) {
-                b.onclick = () => buttonSound.play();
-            }
-        </script>
+        <script src="javascripts/buttonSound.js"></script>
     </body>
 </html>
