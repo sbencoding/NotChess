@@ -25,6 +25,10 @@ a {
     z-index: 1000;
 }
 
+#supportLink {
+    color: gold;
+}
+
 #left {
     display: flex;
     font-family: "Clarendon-Regular";
