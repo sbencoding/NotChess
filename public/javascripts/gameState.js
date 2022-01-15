@@ -299,6 +299,10 @@ function GameState(board, socket, playerNum, personalColor) {
         drawButton.onclick = offerDraw;
         const chatBox = document.querySelector('#chat_box');
         chatBox.addEventListener('keyup', chatMessageHandler);
+        const supportButton = document.querySelector('#supportButton');
+        supportButton.onclick = () => {
+            window.location = "/support";
+        };
     };
 
     return {

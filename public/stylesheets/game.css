@@ -64,6 +64,10 @@ button:active {
     margin-left: auto;
 }
 
+#supportButton:hover {
+    background-color: #FFD700;
+}
+
 #resignButton {
     margin-top: 70px;
     margin-bottom: 20px;
