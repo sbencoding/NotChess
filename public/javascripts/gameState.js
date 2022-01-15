@@ -56,11 +56,11 @@ function GameState(board, socket, playerNum, personalColor) {
         }
 
         if(statusCode === "drawPrompt") {
-            buttons.querySelector("#yesButton").onclick = () => acceptDraw(displayMessage);
-            buttons.querySelector("#noButton").onclick = () => rejectDraw(displayMessage);
+            buttons.querySelector("[name=yesButton]").onclick = () => acceptDraw(displayMessage);
+            buttons.querySelector("[name=noButton]").onclick = () => rejectDraw(displayMessage);
         } else if (statusCode === "gameRematch") {
-            buttons.querySelector("#yesButton").onclick = () => acceptRematch(displayMessage);
-            buttons.querySelector("#noButton").onclick = rejectRematch;
+            buttons.querySelector("[name=yesButton]").onclick = () => acceptRematch(displayMessage);
+            buttons.querySelector("[name=noButton]").onclick = rejectRematch;
         }
     };
 
