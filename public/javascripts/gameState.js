@@ -53,11 +53,13 @@ function GameState(board, socket, playerNum, personalColor) {
     };
 
     let rejectDraw = (showMessage) => {
+        enableDraw();
         socketSend({'command': 'reject_draw'});
         showMessage(`player${playerNumber}`);
     };
 
     let acceptRematch = (showMessage) => {
+        enableDraw();
         socketSend({'command': 'accept_rematch'});
         showMessage('waitingRematch');
     };
@@ -324,6 +326,7 @@ function GameState(board, socket, playerNum, personalColor) {
     let resign = () => {
         displayMessage('gameResigned');
         disableResign();
+        disableDraw();
         socketSend({'command': 'resign'});
         setTimeout(() => {displayMessage('gameRematch')}, 2000);
         clearInterval(timerToken);
